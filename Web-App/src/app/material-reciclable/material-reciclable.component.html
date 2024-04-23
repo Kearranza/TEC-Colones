@@ -1,0 +1,60 @@
+<div class="container mt-4">
+    <h2>Formulario de Material</h2>
+    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="materialName">Nombre del Material</label>
+            <input type="text" class="form-control" id="materialName" formControlName="materialName"
+                placeholder="Ingrese el nombre del material">
+        </div>
+        <div class="form-group">
+            <label for="unit">Unidad</label>
+            <select class="form-control" id="unit" formControlName="unit">
+                <option value="">Seleccione...</option>
+                <option value="Kilogramo">Kilogramo</option>
+                <option value="Litro">Litro</option>
+                <option value="Unidad">Unidad</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="unitValue">Valor en Tec-Colones</label>
+            <input type="number" class="form-control" id="unitValue" formControlName="unitValue"
+                placeholder="Ingrese el valor unitario" pattern="[0-9]{1,6}" max="100000">
+        </div>
+        <div class="form-group">
+            <label for="status">Estado</label>
+            <select class="form-control" id="status" formControlName="status">
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="creationDate">Fecha de Creación</label>
+            <input type="text" class="form-control" id="creationDate" formControlName="creationDate">
+        </div>
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea class="form-control" id="description" formControlName="description" rows="3"
+                placeholder="Ingrese la descripción (opcional)"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="materialId">ID del Material</label>
+            <input type="text" class="form-control" id="materialId" formControlName="materialId">
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!materialForm.valid">Crear</button>
+    </form>
+
+    <div class="mt-4">
+        <h2>Materiales</h2>
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let material of materials">
+                <h5>{{ material.materialName }}</h5>
+                <p>ID: {{ material.materialId }}</p>
+                <p>Valor en Tec-Colones: {{ material.unitValue }}</p>
+                <p>Estado: {{ material.status }}</p>
+                <p>Fecha de Creación: {{ material.creationDate }}</p>
+                <p>Descripción: {{ material.description }}</p>
+            </li>
+        </ul>
+    </div>
+
+</div>
