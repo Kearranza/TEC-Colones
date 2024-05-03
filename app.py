@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import sqlite3
 from datetime import datetime
 import random
 import string
 
 app = Flask(__name__)
+CORS(app)
 
 DATABASE = 'reciclaje.db'
 
