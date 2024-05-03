@@ -1,0 +1,40 @@
+<nav class="navbar navbar-light bg-light mb-3 d-flex">
+    <a class="navbar-brand" routerLink="/">
+        <img src="../../assets/Tec-Colones-Logo.png" width="60" height="60" class="d-inline-block align-top img-margin"
+            alt="">
+    </a>
+    <a routerLink="/lista-materiales" class="text">Lista Materiales</a>
+
+</nav>
+
+<div class="container mt-4">
+    <h2 class="text-center">Materiales</h2>
+    <div style="max-width: 1200px; margin: auto;">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>ID</th>
+                    <th>Unidad</th>
+                    <th>Valor en Tec-Colones</th>
+                    <th>Estado</th>
+                    <th>Fecha de Creación</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let material of materials" class="table-row">
+                    <td>{{ material.nombre }}</td>
+                    <td>{{ material.id }}</td>
+                    <td>{{ material.unidad }}</td>
+                    <td>{{ material.valor_unitario }}</td>
+                    <td>{{ material.estado === 1 ? 'Activo' : 'Inactivo' }}</td>
+                    <td>{{ material.fecha_creacion }}</td>
+                    <td>{{ material.descripcion }}</td>
+                    <td class="delete-cell">
+                        <button class="delete-button">X</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

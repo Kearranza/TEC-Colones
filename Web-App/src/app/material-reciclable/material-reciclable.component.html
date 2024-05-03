@@ -1,60 +1,77 @@
+<nav class="navbar navbar-light bg-light mb-3 d-flex">
+    <a class="navbar-brand" routerLink="/">
+        <img src="../../assets/Tec-Colones-Logo.png" width="60" height="60" class="d-inline-block align-top img-margin"
+            alt="">
+    </a>
+    <a routerLink="/lista-materiales" class="text">Lista Materiales</a>
+
+</nav>
+
 <div class="container mt-4">
-    <h2>Formulario de Material</h2>
-    <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-            <label for="materialName">Nombre del Material</label>
-            <input type="text" class="form-control" id="materialName" formControlName="materialName"
-                placeholder="Ingrese el nombre del material">
-        </div>
-        <div class="form-group">
-            <label for="unit">Unidad</label>
-            <select class="form-control" id="unit" formControlName="unit">
-                <option value="">Seleccione...</option>
-                <option value="Kilogramo">Kilogramo</option>
-                <option value="Litro">Litro</option>
-                <option value="Unidad">Unidad</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="unitValue">Valor en Tec-Colones</label>
-            <input type="number" class="form-control" id="unitValue" formControlName="unitValue"
-                placeholder="Ingrese el valor unitario" pattern="[0-9]{1,6}" max="100000">
-        </div>
-        <div class="form-group">
-            <label for="status">Estado</label>
-            <select class="form-control" id="status" formControlName="status">
-                <option value="Activo">Activo</option>
-                <option value="Inactivo">Inactivo</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="creationDate">Fecha de Creación</label>
-            <input type="text" class="form-control" id="creationDate" formControlName="creationDate">
-        </div>
-        <div class="form-group">
-            <label for="description">Descripción</label>
-            <textarea class="form-control" id="description" formControlName="description" rows="3"
-                placeholder="Ingrese la descripción (opcional)"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="materialId">ID del Material</label>
-            <input type="text" class="form-control" id="materialId" formControlName="materialId">
-        </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!materialForm.valid">Crear</button>
-    </form>
-
-    <div class="mt-4">
-        <h2>Materiales</h2>
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let material of materials">
-                <h5>{{ material.materialName }}</h5>
-                <p>ID: {{ material.materialId }}</p>
-                <p>Valor en Tec-Colones: {{ material.unitValue }}</p>
-                <p>Estado: {{ material.status }}</p>
-                <p>Fecha de Creación: {{ material.creationDate }}</p>
-                <p>Descripción: {{ material.description }}</p>
-            </li>
-        </ul>
+    <div style="max-width: 600px; margin: auto;">
+        <h2 class="text-center">Formulario de Material</h2>
+        <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mt-2">
+                <label for="materialName">Nombre del Material</label>
+                <input type="text" class="form-control" id="materialName" formControlName="materialName"
+                    placeholder="Ingrese el nombre del material">
+                <div *ngIf="materialForm.controls['materialName'].errors?.['required'] && materialForm.controls['materialName'].touched"
+                    class="text-danger">
+                    El nombre del material es requerido.
+                </div>
+                <div *ngIf="materialForm.controls['materialName'].errors?.['minlength']" class="text-danger">
+                    El nombre del material debe ser de al menos 5 caracteres.
+                </div>
+                <div *ngIf="materialForm.controls['materialName'].errors?.['maxlength']" class="text-danger">
+                    El nombre del material no puede ser mayor a 30 caracteres.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="unit">Unidad</label>
+                <select class="form-control" id="unit" formControlName="unit">
+                    <option value="">Seleccione...</option>
+                    <option value="Kilogramo">Kilogramo</option>
+                    <option value="Litro">Litro</option>
+                    <option value="Unidad">Unidad</option>
+                </select>
+                <div *ngIf="materialForm.controls['unit'].errors?.['required'] && materialForm.controls['unit'].touched"
+                    class="text-danger">
+                    La unidad es requerida.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="unitValue">Valor en Tec-Colónes</label>
+                <input type="number" class="form-control" id="unitValue" formControlName="unitValue"
+                    placeholder="Ingrese el valor unitario" pattern="[0-9]{1,6}" max="100000">
+                <div *ngIf="materialForm.controls['unitValue'].errors?.['required'] && materialForm.controls['unitValue'].touched"
+                    class="text-danger">
+                    El valor en Tec-Colónes es requerido.
+                </div>
+                <div *ngIf="materialForm.controls['unitValue'].errors?.['min']" class="text-danger">
+                    El valor en Tec-Colónes debe ser al menos 0.
+                </div>
+                <div *ngIf="materialForm.controls['unitValue'].errors?.['max']" class="text-danger">
+                    El valor en Tec-Colónes no puede ser mayor a 100000.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="status">Estado</label>
+                <select class="form-control" id="status" formControlName="status">
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label for="description">Descripción</label>
+                <textarea class="form-control" id="description" formControlName="description" rows="3"
+                    placeholder="Ingrese la descripción (opcional)"></textarea>
+                <div *ngIf="materialForm.controls['description'].errors?.['maxlength']" class="text-danger">
+                    La descripción no puede tener más de 1000 caracteres.
+                </div>
+            </div>
+            <p *ngIf="message" class="message">{{ message }}</p>
+            <button type="submit" class="btn btn-primary center-button mt-4"
+                [disabled]="!materialForm.valid">Crear</button>
+        </form>
     </div>
-
 </div>

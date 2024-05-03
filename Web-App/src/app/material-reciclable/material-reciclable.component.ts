@@ -1,15 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
-interface Material {
-  materialName: string;
-  unit: string;
-  unitValue: number;
-  status: string;
-  creationDate: string;
-  description: string;
-  materialId: string;
-}
 
 @Component({
   selector: 'app-material-reciclable',
@@ -20,45 +12,53 @@ interface Material {
 
 export class MaterialReciclableComponent implements OnInit {
 
-  creationDate: string | undefined;
-  materialId: string | undefined;
+  message: string = '';
   materialForm: FormGroup = new FormGroup({});
-  materials: Material[] = [];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.creationDate = new Date().toISOString().split('T')[0];
-    this.materialId = 'M-' + Math.random().toString(36).substr(2, 12);
 
     this.materialForm = this.fb.group({
       materialName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       unit: ['', Validators.required],
       unitValue: ['', [Validators.required, Validators.min(0), Validators.max(100000)]],
       status: ['Activo'],
-      creationDate: [{ value: this.creationDate, disabled: true }],
-      description: ['', Validators.maxLength(1000)],
-      materialId: [{ value: this.materialId, disabled: true }]
+      description: ['', Validators.maxLength(1000)]
     });
+
   }
+
   onSubmit(): void {
     if (this.materialForm.valid) {
       // Create a new material object with the form values
-      const material: Material = this.materialForm.value;
-      material.materialId = 'M-' + Math.random().toString(36).substr(2, 12);
-      material.creationDate = new Date().toISOString().split('T')[0];
-      this.materials.push(material);
-      this.materialForm.reset();
+      const material = {
+        nombre: this.materialForm.value.materialName,
+        unidad: this.materialForm.value.unit,
+        valor_unitario: this.materialForm.value.unitValue,
+        estado: this.materialForm.value.status === 'Activo' ? 1 : 0,
+        descripcion: this.materialForm.value.description
+      };
 
-      // Generate new ID and date for the next material
-      this.materialId = 'M-' + Math.random().toString(36).substr(2, 12);
-      this.creationDate = new Date().toISOString().split('T')[0];
+      // Make a POST request to the API
+      this.http.post('http://127.0.0.1:5000/materiales', material).subscribe(response => {
+        // Reset the form
+        this.materialForm.reset();
 
-      // Update the form with the new ID and date
-      this.materialForm.patchValue({
-        materialId: this.materialId,
-        creationDate: this.creationDate
+        this.materialForm.patchValue({
+          status: 'Activo',
+        });
+        this.message = 'El material ha sido creado.';
+
+        // Clear the message after 3 seconds
+        setTimeout(() => {
+          this.message = '';
+        }, 3000);
+      }, error => {
+        // If the request fails, log the error to the console
+        console.error(error);
       });
     }
   }
+
 }
