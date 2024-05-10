@@ -6,7 +6,7 @@ DATABASE = 'reciclaje.db'
 def get_db_connection():
     try:
         conn = sqlite3.connect(DATABASE)
-        conn.row_factory = sqlite3.Row
+        conn.row_factory = sqlite3.Row  # Permite acceder a las columnas por nombre
         return conn
     except sqlite3.Error as e:
         print(f"Error connecting to database: {e}")
@@ -48,6 +48,50 @@ def insert_material(data):
                 data.get('estado', True),
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 data.get('descripcion', '')
+            ))
+            conn.commit()
+            conn.close()
+            return True
+        except sqlite3.Error as e:
+            print(f"Database insert error: {e}")
+            return False
+    return False
+
+def get_all_sedes():
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Sedes')
+        sedes = cursor.fetchall()
+        conn.close()
+        return sedes
+    return None
+
+def get_sede_by_id(sede_id):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Sedes WHERE id = ?', (sede_id,))
+        sede = cursor.fetchone()
+        conn.close()
+        return sede
+    return None
+
+def insert_sede(data):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('''
+                INSERT INTO Sedes (id, nombre, ubicacion, estado, numero_contacto, activa)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (
+                data['id'],
+                data['nombre'],
+                data['ubicacion'],
+                data['estado'],
+                data['numero_contacto'],
+                data['activa']
             ))
             conn.commit()
             conn.close()
