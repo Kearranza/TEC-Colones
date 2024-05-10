@@ -44,6 +44,7 @@ def insert_material(conn, material):
 def main():
     database = "reciclaje.db"
 
+    # SQL para crear las tablas necesarias
     sql_create_materiales_table = """ CREATE TABLE IF NOT EXISTS Materiales (
                                         id text PRIMARY KEY,
                                         nombre text NOT NULL CHECK(LENGTH(nombre) BETWEEN 5 AND 30),
@@ -63,17 +64,29 @@ def main():
                                         activa boolean NOT NULL
                                     ); """
 
-    # create a database connection
+    sql_create_centros_de_acopio_table = """ CREATE TABLE IF NOT EXISTS CentrosDeAcopio (
+                                                codigo TEXT PRIMARY KEY,
+                                                ubicacion TEXT NOT NULL,
+                                                estado BOOLEAN NOT NULL,
+                                                numero_contacto TEXT NOT NULL,
+                                                id_sede TEXT NOT NULL,
+                                                usuario_creador TEXT NOT NULL,
+                                                fecha_creacion TEXT NOT NULL,
+                                                FOREIGN KEY (id_sede) REFERENCES Sedes(id)
+                                            ); """
+
+    # Crear conexión a la base de datos
     conn = create_connection(database)
 
-    # create materials and sedes tables
+    # Crear las tablas
     if conn is not None:
         create_table(conn, sql_create_materiales_table)
         create_table(conn, sql_create_sedes_table)
+        create_table(conn, sql_create_centros_de_acopio_table)
     else:
         print("Error! cannot create the database connection.")
 
-    # Insert new material
+    # Insertar un material de ejemplo (opcional)
     with conn:
         new_material_id = generate_id('M-')
         new_material = (new_material_id, 'pruebaDATOS', 'Kilogramo', 15.5, True, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'Papel reciclable')
