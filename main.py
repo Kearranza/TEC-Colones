@@ -22,10 +22,10 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def generate_id():
-    """ Generate a unique 'M-' prefixed 12-character alphanumeric ID """
+def generate_id(prefix):
+    """ Generate a unique prefixed 12-character alphanumeric ID """
     characters = string.ascii_letters + string.digits
-    random_id = 'M-' + ''.join(random.choice(characters) for i in range(12))
+    random_id = prefix + ''.join(random.choice(characters) for i in range(12))
     return random_id
 
 def insert_material(conn, material):
@@ -54,18 +54,28 @@ def main():
                                         descripcion text CHECK (LENGTH(descripcion) <= 1000)
                                     ); """
 
+    sql_create_sedes_table = """ CREATE TABLE IF NOT EXISTS Sedes (
+                                        id text PRIMARY KEY,
+                                        nombre text NOT NULL UNIQUE,
+                                        ubicacion text NOT NULL,
+                                        estado boolean NOT NULL,
+                                        numero_contacto text NOT NULL,
+                                        activa boolean NOT NULL
+                                    ); """
+
     # create a database connection
     conn = create_connection(database)
 
-    # create materials table
+    # create materials and sedes tables
     if conn is not None:
         create_table(conn, sql_create_materiales_table)
+        create_table(conn, sql_create_sedes_table)
     else:
         print("Error! cannot create the database connection.")
 
     # Insert new material
     with conn:
-        new_material_id = generate_id()
+        new_material_id = generate_id('M-')
         new_material = (new_material_id, 'pruebaDATOS', 'Kilogramo', 15.5, True, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 'Papel reciclable')
         material_id = insert_material(conn, new_material)
         print(f"Material with ID {material_id} created successfully.")
