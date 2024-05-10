@@ -9,6 +9,6 @@ CORS(app)
 app.config.from_object(Config)
 app.register_blueprint(materials)
 app.register_blueprint(sedes)
-
+app.register_blueprint(centros)
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'], use_reloader=False)
