@@ -100,3 +100,48 @@ def insert_sede(data):
             print(f"Database insert error: {e}")
             return False
     return False
+# Funciones para centros de acopio
+def get_all_centros():
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM CentrosDeAcopio')
+        centros = cursor.fetchall()
+        conn.close()
+        return centros
+    return None
+
+def get_centro_by_codigo(codigo):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM CentrosDeAcopio WHERE codigo = ?', (codigo,))
+        centro = cursor.fetchone()
+        conn.close()
+        return centro
+    return None
+
+def insert_centro(data):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('''
+                INSERT INTO CentrosDeAcopio (codigo, ubicacion, estado, numero_contacto, id_sede, usuario_creador, fecha_creacion)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                data['codigo'],
+                data['ubicacion'],
+                data['estado'],
+                data['numero_contacto'],
+                data['id_sede'],
+                data['usuario_creador'],
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            ))
+            conn.commit()
+            conn.close()
+            return True
+        except sqlite3.Error as e:
+            print(f"Database insert error: {e}")
+            return False
+    return False
