@@ -26,8 +26,8 @@ def get_sede(id):
 def create_sede():
     """Endpoint to create a new sede after validating required fields."""
     data = request.get_json()
-    if not data or not all(k in data for k in ['nombre', 'ubicacion', 'estado', 'numero_contacto', 'activa']):
-        return jsonify({"error": "Missing data, required fields: nombre, ubicacion, estado, numero_contacto, activa"}), 400
+    if not data or not all(k in data for k in ['nombre', 'ubicacion', 'estado', 'numero_contacto']):
+        return jsonify({"error": "Missing data, required fields: nombre, ubicacion, estado, numero_contacto"}), 400
     
     # Generate a unique ID for the new sede
     data['id'] = generate_id('S-')
