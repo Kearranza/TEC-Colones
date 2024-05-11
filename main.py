@@ -60,8 +60,7 @@ def main():
                                         nombre text NOT NULL UNIQUE,
                                         ubicacion text NOT NULL,
                                         estado boolean NOT NULL,
-                                        numero_contacto text NOT NULL,
-                                        activa boolean NOT NULL
+                                        numero_contacto text NOT NULL
                                     ); """
 
     sql_create_centros_de_acopio_table = """ CREATE TABLE IF NOT EXISTS CentrosDeAcopio (
