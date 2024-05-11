@@ -83,15 +83,14 @@ def insert_sede(data):
         cursor = conn.cursor()
         try:
             cursor.execute('''
-                INSERT INTO Sedes (id, nombre, ubicacion, estado, numero_contacto, activa)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO Sedes (id, nombre, ubicacion, estado, numero_contacto)
+                VALUES (?, ?, ?, ?, ?)
             ''', (
                 data['id'],
                 data['nombre'],
                 data['ubicacion'],
                 data['estado'],
-                data['numero_contacto'],
-                data['activa']
+                data['numero_contacto']
             ))
             conn.commit()
             conn.close()
