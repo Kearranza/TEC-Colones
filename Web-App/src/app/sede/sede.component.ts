@@ -20,7 +20,7 @@ export class SedeComponent implements OnInit {
     this.sedeForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(30)]],
       ubicacion: ['', Validators.required],
-      estado: ['activo'],
+      estado: ['Activo'],
       numeroContacto: ['', Validators.required]
     });
   }
@@ -55,9 +55,9 @@ export class SedeComponent implements OnInit {
       this.http.post('http://127.0.0.1:5000/sedes', payload).subscribe({
         next: () => {
           this.sedeForm.reset();
-          this.sedeForm.patchValue({ estado: 'Activo' }); // Set default form state
+          this.sedeForm.patchValue({ estado: 'Activo' }); 
           this.nombreChecked = false;
-          this.message = 'Sede creada con éxito.';
+          this.message = 'Sede creada con éxito';
 
           setTimeout(() => this.message = '', 3000);
         },
