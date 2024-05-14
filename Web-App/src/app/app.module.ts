@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ListaMaterialesComponent } from './lista-materiales/lista-materiales.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SedeComponent } from './sede/sede.component';
+import { CentroComponent } from './centro/centro.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { SedeComponent } from './sede/sede.component';
     MaterialReciclableComponent,
     ListaMaterialesComponent,
     NavbarComponent,
-    SedeComponent
+    SedeComponent,
+    CentroComponent
   ],
   imports: [
     BrowserModule,
