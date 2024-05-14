@@ -11,12 +11,14 @@ export class SedeComponent implements OnInit {
   sedeForm!: FormGroup;
   nombreUnavailable: boolean = false;
   nombreChecked: boolean = false;
+  places: string[] = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Puntarenas', 'Guanacaste', 'Limón'];
+  message: string = '';
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.sedeForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
+      nombre: ['', [Validators.required, Validators.maxLength(30)]],
       ubicacion: ['', Validators.required],
       estado: ['activo'],
       numeroContacto: ['', Validators.required]
@@ -33,24 +35,35 @@ export class SedeComponent implements OnInit {
         // Check if any sede has the same name as the entered one
         const nombreExists = sedes.some(sede => sede.nombre.toLowerCase() === nombre.toLowerCase());
         this.nombreUnavailable = nombreExists;
-        this.nombreChecked = true;
+        // Set nombreChecked to true only if the name does not exist in the database
+        this.nombreChecked = !nombreExists;
       },
       error: (error) => {
-        console.error('Error fetching sedes', error);
+        this.nombreChecked = true;
       }
     });
   }
 
   onSubmit(): void {
-    if (this.sedeForm.valid && this.nombreChecked && !this.nombreUnavailable) {
-      this.http.post('http://127.0.0.1:5000/sedes', this.sedeForm.value).subscribe({
-        next: (response) => {
-          console.log('Sede created successfully', response);
-          // Handle successful creation (e.g., display a success message or redirect)
+    if (this.sedeForm.valid) {
+      const payload = {
+        nombre: this.sedeForm.value.nombre,
+        ubicacion: this.sedeForm.value.ubicacion,
+        estado: this.sedeForm.value.estado === 'Activo' ? 1 : 0,
+        numero_contacto: this.sedeForm.value.numeroContacto
+      };
+      this.http.post('http://127.0.0.1:5000/sedes', payload).subscribe({
+        next: () => {
+          this.sedeForm.reset();
+          this.sedeForm.patchValue({ estado: 'Activo' }); // Set default form state
+          this.nombreChecked = false;
+          this.message = 'Sede creada con éxito.';
+
+          setTimeout(() => this.message = '', 3000);
         },
+
         error: (error) => {
           console.error('Error creating sede', error);
-          // Handle error (e.g., display an error message)
         }
       });
     }
