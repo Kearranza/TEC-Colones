@@ -16,8 +16,8 @@ export class CentroComponent implements OnInit {
   ngOnInit(): void {
     this.centroForm = this.fb.group({
       codigo: ['', Validators.required],
-      ubicacion: ['', Validators.required],
-      estado: ['', Validators.required],
+      ubicacion: ['', Validators.required,Validators.maxLength(1000)],
+      estado: ['activo'],
       numero_contacto: ['', Validators.required],
       id_sede: ['', Validators.required]
     });

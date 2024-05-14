@@ -2,17 +2,26 @@
 
 <div class="container mt-4">
     <div style="max-width: 600px; margin: auto;">
-        <h2 class="text-center">Creación de Centro</h2>
+        <h2 class="text-center">Creación de Centro de Acopio</h2>
         <form [formGroup]="centroForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label for="codigo">Código</label>
-                <input type="text" class="form-control" id="codigo" formControlName="codigo"
-                    placeholder="Ingrese el código del centro">
+                <input type="text" class="form-control" id="codigo" formControlName="codigo">
+                <div *ngIf="centroForm.controls['codigo'].errors?.['required'] && centroForm.controls['codigo'].touched"
+                    class="text-danger">
+                    El código es requerido.
+                </div>
             </div>
             <div class="form-group">
                 <label for="ubicacion">Ubicación</label>
-                <input type="text" class="form-control" id="ubicacion" formControlName="ubicacion"
-                    placeholder="Ingrese la ubicación del centro">
+                <textarea class="form-control" id="ubicacion" formControlName="ubicacion" rows="3"></textarea>
+                <div *ngIf="centroForm.controls['ubicacion'].errors?.['maxlength']" class="text-danger">
+                    La ubicación no puede tener más de 1000 caracteres.
+                </div>
+                <div *ngIf="centroForm.controls['ubicacion'].errors?.['required'] && centroForm.controls['ubicacion'].touched"
+                    class="text-danger">
+                    La ubicación del centro es requerida.
+                </div>
             </div>
             <div class="form-group">
                 <label for="estado">Estado</label>
@@ -23,13 +32,15 @@
             </div>
             <div class="form-group">
                 <label for="numero_contacto">Número de Contacto</label>
-                <input type="text" class="form-control" id="numero_contacto" formControlName="numero_contacto"
-                    placeholder="Ingrese el número de contacto">
+                <input type="text" class="form-control" id="numero_contacto" formControlName="numero_contacto">
+                <div *ngIf="centroForm.controls['numero_contacto'].errors?.['required'] && centroForm.controls['numero_contacto'].touched"
+                    class="text-danger">
+                    El número de contacto es requerido.
+                </div>
             </div>
             <div class="form-group">
                 <label for="id_sede">ID de Sede</label>
-                <input type="text" class="form-control" id="id_sede" formControlName="id_sede"
-                    placeholder="Ingrese el ID de la sede asociada">
+                <input type="text" class="form-control" id="id_sede" formControlName="id_sede">
             </div>
             <button type="submit" class="btn btn-primary" [disabled]="!centroForm.valid">Registrar Centro</button>
         </form>
