@@ -27,6 +27,15 @@
     text-align: center;
 }
 
+.text-warning {
+    animation: breathe 3s infinite;
+    text-align: center;
+}
+.text-success {
+    animation: breathe 3s infinite;
+    text-align: center;
+}
+
 .btn-primary {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -34,6 +43,24 @@
 .btn-primary:hover {
     transform: scale(1.05);
     box-shadow: 5px 5px 10px #0d2026;
+}
+
+.message {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    animation: breathe 3s infinite;
+    color: #0d2026;
+    text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5);
+}
+
+.btn-outline-secondary {
+    margin-left: 4px;
+}
+
+.thick-outline-button:not(:disabled) {
+    border-width: 2px;
+    
 }
 
 .message {

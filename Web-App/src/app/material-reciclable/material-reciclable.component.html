@@ -1,15 +1,8 @@
-<nav class="navbar navbar-light bg-light mb-3 d-flex">
-    <a class="navbar-brand" routerLink="/">
-        <img src="../../assets/Tec-Colones-Logo.png" width="60" height="60" class="d-inline-block align-top img-margin"
-            alt="">
-    </a>
-    <a routerLink="/lista-materiales" class="text">Lista Materiales</a>
-
-</nav>
+<app-navbar></app-navbar>
 
 <div class="container mt-4">
     <div style="max-width: 600px; margin: auto;">
-        <h2 class="text-center">Formulario de Material</h2>
+        <h2 class="text-center">Creación de Material</h2>
         <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
             <div class="form-group mt-2">
                 <label for="materialName">Nombre del Material</label>

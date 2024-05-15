@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+    <div style="max-width: 600px; margin: auto;">
+        <h2 class="text-center">Creación de Centro de Acopio</h2>
+        <form [formGroup]="centroForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mt-2">
+                <label for="codigo">Código</label>
+                <input type="text" class="form-control" id="codigo" formControlName="codigo">
+                <div *ngIf="centroForm.controls['codigo'].errors?.['required'] && centroForm.controls['codigo'].touched"
+                    class="text-danger">
+                    El código es requerido.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="ubicacion">Ubicación</label>
+                <textarea class="form-control" id="ubicacion" formControlName="ubicacion" rows="3"></textarea>
+                <div *ngIf="centroForm.controls['ubicacion'].errors?.['maxlength']" class="text-danger">
+                    La ubicación no puede tener más de 1000 caracteres.
+                </div>
+                <div *ngIf="centroForm.controls['ubicacion'].errors?.['required'] && centroForm.controls['ubicacion'].touched"
+                    class="text-danger">
+                    La ubicación del centro es requerida.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="estado">Estado</label>
+                <select class="form-control" id="estado" formControlName="estado">
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label for="numero_contacto">Número de Contacto</label>
+                <input type="number" class="form-control" id="numero_contacto" formControlName="numero_contacto">
+                <div *ngIf="centroForm.controls['numero_contacto'].errors?.['required'] && centroForm.controls['numero_contacto'].touched"
+                    class="text-danger">
+                    El número de contacto es requerido.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="id_sede">Sede</label>
+                <select class="form-control" id="id_sede" formControlName="id_sede">
+                    <option value="">Seleccione una Sede</option>
+                    <option *ngFor="let sede of sedes" [ngValue]="sede.id">{{sede.nombre}}</option>
+                </select>
+                <div *ngIf="centroForm.controls['id_sede'].errors?.['required'] && centroForm.controls['id_sede'].touched"
+                    class="text-danger">
+                    La sede es requerida.
+                </div>
+            </div>
+            <div *ngIf="message" class="message">{{message}}</div>
+            <button type="submit" class="btn btn-primary center-button mt-4" [disabled]="!centroForm.valid">
+                Crear</button>
+        </form>
+    </div>
+</div>

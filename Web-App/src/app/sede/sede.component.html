@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+    <div style="max-width: 600px; margin: auto;">
+        <h2 class="text-center">Creación de Sede</h2>
+        <form [formGroup]="sedeForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mt-2">
+                <label for="nombre">Nombre de la Sede</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                        placeholder="Ingrese el nombre de la sede" (change)="nombreChecked = false">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary thick-outline-button" type="button" (click)="checkNombre()" [disabled]="!sedeForm.controls['nombre'].valid">Verificar
+                            Disponibilidad</button>
+                    </div>
+                </div>
+                <div *ngIf="nombreUnavailable" class="text-danger">
+                    El nombre de la sede no se encuentra disponible.
+                </div>
+                <div *ngIf="nombreChecked && sedeForm.controls['nombre'].valid && !nombreUnavailable"
+                    class="text-success">
+                    El nombre de la sede está disponible.
+                </div>
+                <div *ngIf="sedeForm.controls['nombre'].errors?.['required'] && sedeForm.controls['nombre'].touched"
+                    class="text-danger">
+                    El nombre de la sede es requerido.
+                </div>
+                <div *ngIf="sedeForm.controls['nombre'].errors?.['maxlength']" class="text-danger">
+                    El nombre de la sede no puede ser mayor a 30 caracteres.
+                </div>
+                <div *ngIf="!nombreChecked && sedeForm.controls['nombre'].touched" class="text-warning">
+                    Por favor, verifique la disponibilidad del nombre.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="ubicacion">Ubicación</label>
+                <select id="ubicacion" formControlName="ubicacion" class="form-control">
+                    <option *ngFor="let place of places" [value]="place">{{ place }}</option>
+                </select>
+                <div *ngIf="sedeForm.controls['ubicacion'].errors?.['required'] && sedeForm.controls['ubicacion'].touched"
+                    class="text-danger">
+                    La ubicación es requerida.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="estado">Estado</label>
+                <select id="estado" formControlName="estado" class="form-control">
+                    <option value="Activo" selected>Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                </select>
+            </div>
+            <div class="form-group mt-2">
+                <label for="numeroContacto">Número de Contacto</label>
+                <input type="number" id="numeroContacto" formControlName="numeroContacto" class="form-control">
+                <div *ngIf="sedeForm.controls['numeroContacto'].errors?.['required'] && sedeForm.controls['numeroContacto'].touched"
+                    class="text-danger">
+                    El número de contacto es requerido.
+                </div>
+            </div>
+            <div *ngIf="message" class="message">{{message}}</div>
+            <button type="submit" class="btn btn-primary center-button mt-4" [disabled]="!sedeForm.valid || !nombreChecked">Crear</button>
+        </form>
+    </div>
+</div>
