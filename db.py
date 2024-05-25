@@ -144,3 +144,58 @@ def insert_centro(data):
             print(f"Database insert error: {e}")
             return False
     return False
+
+def get_all_cambios():
+    """Retrieve all records from the Cambios table."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Cambios")
+        cambios = cursor.fetchall()
+        conn.close()
+        return cambios
+    return None
+
+def get_cambio_by_id(cambio_id):
+    """Retrieve a specific cambio by ID."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Cambios WHERE id = ?", (cambio_id,))
+        cambio = cursor.fetchone()
+        conn.close()
+        return cambio
+    return None
+
+def insert_cambio(data):
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+
+        # Verifica si el centro de acopio existe
+        cursor.execute("SELECT * FROM CentrosDeAcopio WHERE codigo = ?", (data['codigo_centro_acopio'],))
+        centro = cursor.fetchone()
+        if not centro:
+            conn.close()
+            return False, "Centro de acopio no encontrado"
+
+        # Intenta insertar el nuevo cambio
+        try:
+            cursor.execute('''
+                INSERT INTO Cambios (id, codigo_centro_acopio, estudiante, fecha_transaccion, monto)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (
+                data['id'],
+                data['codigo_centro_acopio'],
+                data['estudiante'],
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                data['monto']
+            ))
+            conn.commit()
+            conn.close()
+            return True, "Cambio creado exitosamente"
+        except sqlite3.Error as e:
+            conn.close()
+            return False, f"Error al insertar el cambio: {e}"
+    else:
+        return False, "Error de conexión a la base de datos"
