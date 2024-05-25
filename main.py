@@ -74,6 +74,15 @@ def main():
                                                 FOREIGN KEY (id_sede) REFERENCES Sedes(id)
                                             ); """
 
+    sql_create_cambios_table = """ CREATE TABLE IF NOT EXISTS Cambios (
+                                        id TEXT PRIMARY KEY,
+                                        codigo_centro_acopio TEXT NOT NULL,
+                                        estudiante TEXT NOT NULL,
+                                        fecha_transaccion TEXT NOT NULL,
+                                        monto INTEGER NOT NULL,
+                                        FOREIGN KEY (codigo_centro_acopio) REFERENCES CentrosDeAcopio(codigo)
+                                    ); """
+
     # Crear conexión a la base de datos
     conn = create_connection(database)
 
@@ -82,6 +91,7 @@ def main():
         create_table(conn, sql_create_materiales_table)
         create_table(conn, sql_create_sedes_table)
         create_table(conn, sql_create_centros_de_acopio_table)
+        create_table(conn, sql_create_cambios_table)
     else:
         print("Error! cannot create the database connection.")
 
@@ -94,3 +104,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
