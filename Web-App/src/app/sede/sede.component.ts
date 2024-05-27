@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { ACTIVE, PROVINCES } from '../constants';
 
 @Component({
   selector: 'app-sede',
@@ -11,7 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class SedeComponent implements OnInit {
   sedeForm!: FormGroup;
-  places: string[] = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Puntarenas', 'Guanacaste', 'Limón'];
+  places: string[] = PROVINCES;
   message: string = '';
   nombreMessage: string = '';
   nombreExists: boolean = false;
@@ -22,7 +23,7 @@ export class SedeComponent implements OnInit {
     this.sedeForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(30)]],
       ubicacion: ['', Validators.required],
-      estado: ['Activo'],
+      estado: [ACTIVE],
       numeroContacto: ['', Validators.required]
     });
   }
@@ -64,14 +65,14 @@ export class SedeComponent implements OnInit {
         const formData = {
           nombre: this.sedeForm.value.nombre,
           ubicacion: this.sedeForm.value.ubicacion,
-          estado: this.sedeForm.value.estado === 'Activo' ? 1 : 0,
+          estado: this.sedeForm.value.estado === ACTIVE ? 1 : 0,
           numero_contacto: this.sedeForm.value.numeroContacto
         };
         this.http.post('http://127.0.0.1:5000/sedes', formData).subscribe(
           response => {
             console.log('Success!', response);
             this.sedeForm.reset();
-            this.sedeForm.patchValue({ estado: 'Activo' });
+            this.sedeForm.patchValue({ estado: ACTIVE });
             this.message = 'Sede creada con éxito';
   
             setTimeout(() => this.message = '', 3000);
