@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from materials import materials
 from sedes import sedes
 from centros import centros
