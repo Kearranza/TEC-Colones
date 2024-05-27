@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
+import { ACTIVE } from '../constants';
 
 @Component({
   selector: 'app-material-reciclable',
@@ -23,7 +23,7 @@ export class MaterialReciclableComponent implements OnInit {
       materialName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(30)]],
       unit: ['', Validators.required],
       unitValue: ['', [Validators.required, Validators.min(0), Validators.max(100000)]],
-      status: ['Activo'],
+      status: [ACTIVE],
       description: ['', Validators.maxLength(1000)]
     });
 
@@ -36,7 +36,7 @@ export class MaterialReciclableComponent implements OnInit {
         nombre: this.materialForm.value.materialName,
         unidad: this.materialForm.value.unit,
         valor_unitario: this.materialForm.value.unitValue,
-        estado: this.materialForm.value.status === 'Activo' ? 1 : 0,
+        estado: this.materialForm.value.status === ACTIVE ? 1 : 0,
         descripcion: this.materialForm.value.description
       };
 
@@ -46,7 +46,7 @@ export class MaterialReciclableComponent implements OnInit {
         this.materialForm.reset();
 
         this.materialForm.patchValue({
-          status: 'Activo',
+          status: ACTIVE,
         });
         this.message = 'El material ha sido creado.';
 
