@@ -1,0 +1,25 @@
+<div class="container">
+    <img src="../../assets/Tec-Colones-Logo.png" alt="logo" class="logo">
+    <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input type="text" class="form-control" id="usuario" [(ngModel)]="username" name="user" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <input type="password" class="form-control" id="contrasena" [(ngModel)]="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="permisos">Permisos</label>
+            <select class="form-control" id="permisos" [(ngModel)]="rights" name="rights" required>
+                <option value="administrador">Administrador</option>
+                <option value="centro">Centro</option>
+                <option value="estudiante">Estudiante</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+    </form>
+</div>

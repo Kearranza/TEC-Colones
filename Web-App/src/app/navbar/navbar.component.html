@@ -3,7 +3,24 @@
         <img src="../../assets/Tec-Colones-Logo.png" width="60" height="60" class="d-inline-block align-top img-margin"
             alt="">
     </a>
-    <a routerLink="/lista-materiales" class="text">Lista Materiales</a>
-    <a routerLink="/sede" class="text">Sede</a>
-    <a routerLink="/centro" class="text">Centro</a>
+    <ng-container *ngIf="userRights === 'administrador'">
+        <a routerLink="/material-reciclable" class="text">Crear Material</a>
+        <a routerLink="/lista-materiales" class="text">Lista Materiales</a>
+        <a routerLink="/sede" class="text">Crear Sede</a>
+        <a routerLink="/centro" class="text">Crear Centro</a>
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+    </ng-container>
+
+    <ng-container *ngIf="userRights === 'centro'">
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+    </ng-container>
+
+    <ng-container *ngIf="userRights === 'estudiante'">
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+    </ng-container>
+
+    <ng-container *ngIf="userRights === ''|| !userRights">
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+    </ng-container>
+
 </nav>

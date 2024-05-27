@@ -9,6 +9,9 @@ import { ListaMaterialesComponent } from './lista-materiales/lista-materiales.co
 import { NavbarComponent } from './navbar/navbar.component';
 import { SedeComponent } from './sede/sede.component';
 import { CentroComponent } from './centro/centro.component';
+import { LogInComponent } from './log-in/log-in.component';
+import { FormsModule } from '@angular/forms';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +20,16 @@ import { CentroComponent } from './centro/centro.component';
     ListaMaterialesComponent,
     NavbarComponent,
     SedeComponent,
-    CentroComponent
+    CentroComponent,
+    LogInComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

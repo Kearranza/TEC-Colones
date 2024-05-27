@@ -33,3 +33,9 @@
     transform: scale(1.1);
     color: #c0dee9;
 }
+
+.rightmost-link {
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+}
