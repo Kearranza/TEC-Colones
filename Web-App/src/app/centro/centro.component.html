@@ -6,10 +6,24 @@
         <form [formGroup]="centroForm" (ngSubmit)="onSubmit()">
             <div class="form-group mt-2">
                 <label for="codigo">Código</label>
-                <input type="text" class="form-control" id="codigo" formControlName="codigo">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="codigo" formControlName="codigo"
+                        (input)="codigoExists = false">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary thick-outline-button" type="button"
+                            (click)="preCheckCodigo()" [disabled]="!centroForm.controls['codigo'].valid">Verificar
+                            Disponibilidad</button>
+                    </div>
+                </div>
+                <div *ngIf="codigoMessage" class="text-success">
+                    {{ codigoMessage }}
+                </div>
                 <div *ngIf="centroForm.controls['codigo'].errors?.['required'] && centroForm.controls['codigo'].touched"
                     class="text-danger">
                     El código es requerido.
+                </div>
+                <div *ngIf="codigoExists" class="text-danger">
+                    El codigo ya se encuentra registrado.
                 </div>
             </div>
             <div class="form-group mt-2">
@@ -51,7 +65,8 @@
             </div>
             <div *ngIf="message" class="message">{{message}}</div>
             <button type="submit" class="btn btn-primary center-button mt-4" [disabled]="!centroForm.valid">
-                Crear</button>
+                Crear
+            </button>
         </form>
     </div>
 </div>

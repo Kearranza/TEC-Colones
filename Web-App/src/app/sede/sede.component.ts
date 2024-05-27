@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sede',
@@ -9,10 +11,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SedeComponent implements OnInit {
   sedeForm!: FormGroup;
-  nombreUnavailable: boolean = false;
-  nombreChecked: boolean = false;
   places: string[] = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Puntarenas', 'Guanacaste', 'Limón'];
   message: string = '';
+  nombreMessage: string = '';
+  nombreExists: boolean = false;
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -25,47 +27,60 @@ export class SedeComponent implements OnInit {
     });
   }
 
-  checkNombre(): void {
-    const nombre = this.sedeForm.get('nombre')?.value;
-    if (!nombre) {
-      return;
-    }
-    this.http.get<any[]>('http://127.0.0.1:5000/sedes').subscribe({
-      next: (sedes: any[]) => {
-        // Check if any sede has the same name as the entered one
-        const nombreExists = sedes.some(sede => sede.nombre.toLowerCase() === nombre.toLowerCase());
-        this.nombreUnavailable = nombreExists;
-        // Set nombreChecked to true only if the name does not exist in the database
-        this.nombreChecked = !nombreExists;
-      },
-      error: (error) => {
-        this.nombreChecked = true;
+  // Make a check for the "nombre" field before clicking the submit button
+  preCheckNombre(): void {
+    this.checkNombre().subscribe(nombreExists => {
+      if (nombreExists) {
+        this.nombreMessage = '';
+      } else {
+        this.nombreMessage = 'El nombre de la sede se encuentra disponible';
       }
+      setTimeout(() => this.nombreMessage = '', 3000);
     });
   }
 
-  onSubmit(): void {
-    if (this.sedeForm.valid) {
-      const payload = {
-        nombre: this.sedeForm.value.nombre,
-        ubicacion: this.sedeForm.value.ubicacion,
-        estado: this.sedeForm.value.estado === 'Activo' ? 1 : 0,
-        numero_contacto: this.sedeForm.value.numeroContacto
-      };
-      this.http.post('http://127.0.0.1:5000/sedes', payload).subscribe({
-        next: () => {
-          this.sedeForm.reset();
-          this.sedeForm.patchValue({ estado: 'Activo' }); 
-          this.nombreChecked = false;
-          this.message = 'Sede creada con éxito';
-
-          setTimeout(() => this.message = '', 3000);
-        },
-
-        error: (error) => {
-          console.error('Error creating sede', error);
-        }
-      });
+  // Make a check for the "nombre" field when clicking the submit button
+  checkNombre(): Observable<boolean> {
+    const nombre = this.sedeForm.get('nombre')?.value;
+    if (!nombre) {
+      return of(false);
     }
+    return this.http.get<any[]>('http://127.0.0.1:5000/sedes').pipe(
+      map((sedes: any[]) => {
+        const nombreExists = sedes.some(sede => sede.nombre.toLowerCase() === nombre.toLowerCase());
+        this.nombreExists = nombreExists;
+        return nombreExists;
+      }),
+      catchError((error) => {
+        console.error('Error checking nombre', error);
+        return of(false);
+      })
+    );
+  }
+
+  onSubmit(): void {
+    this.checkNombre().subscribe(nombreExists => {
+      if (this.sedeForm.valid && !nombreExists) {
+        const formData = {
+          nombre: this.sedeForm.value.nombre,
+          ubicacion: this.sedeForm.value.ubicacion,
+          estado: this.sedeForm.value.estado === 'Activo' ? 1 : 0,
+          numero_contacto: this.sedeForm.value.numeroContacto
+        };
+        this.http.post('http://127.0.0.1:5000/sedes', formData).subscribe(
+          response => {
+            console.log('Success!', response);
+            this.sedeForm.reset();
+            this.sedeForm.patchValue({ estado: 'Activo' });
+            this.message = 'Sede creada con éxito';
+  
+            setTimeout(() => this.message = '', 3000);
+          },
+          error => {
+            console.error('Error creating sede', error);
+          }
+        );
+      }
+    });
   }
 }

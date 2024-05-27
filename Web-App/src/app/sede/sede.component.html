@@ -8,18 +8,18 @@
                 <label for="nombre">Nombre de la Sede</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="nombre" formControlName="nombre"
-                        placeholder="Ingrese el nombre de la sede" (change)="nombreChecked = false">
+                    (input)="nombreExists = false">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary thick-outline-button" type="button" (click)="checkNombre()" [disabled]="!sedeForm.controls['nombre'].valid">Verificar
+                        <button class="btn btn-outline-secondary thick-outline-button" type="button"
+                            (click)="preCheckNombre()" [disabled]="!sedeForm.controls['nombre'].valid">Verificar
                             Disponibilidad</button>
                     </div>
                 </div>
-                <div *ngIf="nombreUnavailable" class="text-danger">
-                    El nombre de la sede no se encuentra disponible.
+                <div *ngIf="nombreMessage" class="text-success">
+                    {{ nombreMessage }}
                 </div>
-                <div *ngIf="nombreChecked && sedeForm.controls['nombre'].valid && !nombreUnavailable"
-                    class="text-success">
-                    El nombre de la sede está disponible.
+                <div *ngIf="nombreExists" class="text-danger">
+                    El nombre de la sede no se encuentra disponible.
                 </div>
                 <div *ngIf="sedeForm.controls['nombre'].errors?.['required'] && sedeForm.controls['nombre'].touched"
                     class="text-danger">
@@ -27,9 +27,6 @@
                 </div>
                 <div *ngIf="sedeForm.controls['nombre'].errors?.['maxlength']" class="text-danger">
                     El nombre de la sede no puede ser mayor a 30 caracteres.
-                </div>
-                <div *ngIf="!nombreChecked && sedeForm.controls['nombre'].touched" class="text-warning">
-                    Por favor, verifique la disponibilidad del nombre.
                 </div>
             </div>
             <div class="form-group mt-2">
@@ -58,7 +55,8 @@
                 </div>
             </div>
             <div *ngIf="message" class="message">{{message}}</div>
-            <button type="submit" class="btn btn-primary center-button mt-4" [disabled]="!sedeForm.valid || !nombreChecked">Crear</button>
+            <button type="submit" class="btn btn-primary center-button mt-4"
+                [disabled]="!sedeForm.valid">Crear</button>
         </form>
     </div>
 </div>
