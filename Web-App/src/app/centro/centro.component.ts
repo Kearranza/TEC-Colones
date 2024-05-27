@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { ACTIVE } from '../constants';
 
 @Component({
   selector: 'app-centro',
@@ -62,7 +63,7 @@ export class CentroComponent implements OnInit {
     this.centroForm = this.fb.group({
       codigo: ['', Validators.required],
       ubicacion: ['', [Validators.required, Validators.maxLength(1000)]],
-      estado: ['Activo'],
+      estado: [ACTIVE],
       numero_contacto: ['', Validators.required],
       id_sede: ['', Validators.required]
     });
@@ -76,13 +77,13 @@ export class CentroComponent implements OnInit {
         const formData = {
           ...this.centroForm.value,
           usuario_creador: this.usuarioCreador,
-          estado: this.centroForm.value.estado === 'Activo' ? 1 : 0
+          estado: this.centroForm.value.estado === ACTIVE ? 1 : 0
         };
         this.http.post('http://127.0.0.1:5000/centros', formData).subscribe(
           response => {
             console.log('Success!', response);
             this.centroForm.reset();
-            this.centroForm.patchValue({ estado: 'Activo' });
+            this.centroForm.patchValue({ estado: ACTIVE });
             this.message = 'Centro creado con éxito';
   
             setTimeout(() => this.message = '', 3000);
