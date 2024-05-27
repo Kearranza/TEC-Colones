@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CacheService } from '../cache.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-log-in',
@@ -7,11 +8,11 @@ import { CacheService } from '../cache.service';
   styleUrls: ['./log-in.component.css']
 })
 export class LogInComponent {
-  username = '';
-  password = '';
-  rights = '';
+  username: string = '';
+  password: string = '';
+  rights: string = '';
 
-  constructor(private cache: CacheService) { }
+  constructor(private cache: CacheService, private router: Router) { }
 
   onSubmit(): void {
     const user = {
@@ -20,5 +21,6 @@ export class LogInComponent {
       rights: this.rights
     };
     this.cache.setItem('user', user);
+    this.router.navigate(['/']);
   }
 }

@@ -11,6 +11,7 @@ import { SedeComponent } from './sede/sede.component';
 import { CentroComponent } from './centro/centro.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { FormsModule } from '@angular/forms';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
     NavbarComponent,
     SedeComponent,
     CentroComponent,
-    LogInComponent
+    LogInComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
