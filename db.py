@@ -174,22 +174,29 @@ def insert_cambio(data):
 
         # Verifica si el centro de acopio existe
         cursor.execute("SELECT * FROM CentrosDeAcopio WHERE codigo = ?", (data['codigo_centro_acopio'],))
-        centro = cursor.fetchone()
-        if not centro:
+        if not cursor.fetchone():
             conn.close()
             return False, "Centro de acopio no encontrado"
+
+        # Verifica si el ID del material existe
+        cursor.execute("SELECT * FROM Materiales WHERE id = ?", (data['id_material'],))
+        if not cursor.fetchone():
+            conn.close()
+            return False, "ID de material no encontrado"
 
         # Intenta insertar el nuevo cambio
         try:
             cursor.execute('''
-                INSERT INTO Cambios (id, codigo_centro_acopio, estudiante, fecha_transaccion, monto)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO Cambios (id, codigo_centro_acopio, estudiante, fecha_transaccion, monto, id_material, cantidad)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             ''', (
                 data['id'],
                 data['codigo_centro_acopio'],
                 data['estudiante'],
                 datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                data['monto']
+                data['monto'],
+                data['id_material'],
+                data['cantidad']
             ))
             conn.commit()
             conn.close()
