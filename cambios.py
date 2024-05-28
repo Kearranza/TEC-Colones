@@ -24,15 +24,19 @@ def get_cambio(id):
 def create_cambio():
     """Endpoint to create a new cambio."""
     data = request.get_json()
-    required_fields = ['codigo_centro_acopio', 'estudiante', 'monto']
+    required_fields = ['codigo_centro_acopio', 'estudiante', 'monto', 'id_material', 'cantidad']
     if not data or not all(field in data for field in required_fields):
-        return jsonify({'error': 'Missing data, required fields: codigo_centro_acopio, estudiante, monto'}), 400
+        return jsonify({'error': 'Missing data, required fields: codigo_centro_acopio, estudiante, monto, id_material, cantidad'}), 400
     
+    # Validar que la cantidad es un entero y no es negativa
+    if not isinstance(data['cantidad'], int) or data['cantidad'] < 0:
+        return jsonify({'error': 'Cantidad debe ser un número entero no negativo'}), 400
+
     data['id'] = generate_id('R-')
-    success = insert_cambio(data)
+    success, message = insert_cambio(data)
     if success:
         # Devuelve el ID del cambio si se creó correctamente
-        return jsonify({'id': data['id']}), 201
+        return jsonify({'id': data['id'], 'message': message}), 201
     else:
         # Devuelve un mensaje de error si el cambio no se pudo generar
-        return jsonify({"error": "No se generó el cambio de material"}), 500
+        return jsonify({"error": message}), 500
