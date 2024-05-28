@@ -80,7 +80,10 @@ def main():
                                         estudiante TEXT NOT NULL,
                                         fecha_transaccion TEXT NOT NULL,
                                         monto INTEGER NOT NULL,
-                                        FOREIGN KEY (codigo_centro_acopio) REFERENCES CentrosDeAcopio(codigo)
+                                        id_material TEXT NOT NULL CHECK (id_material LIKE 'M-____________'),
+                                        cantidad INTEGER NOT NULL CHECK (cantidad >= 0),
+                                        FOREIGN KEY (codigo_centro_acopio) REFERENCES CentrosDeAcopio(codigo),
+                                        FOREIGN KEY (id_material) REFERENCES Materiales(id)
                                     ); """
 
     # Crear conexión a la base de datos
@@ -104,4 +107,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
