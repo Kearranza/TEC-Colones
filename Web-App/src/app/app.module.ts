@@ -12,6 +12,7 @@ import { CentroComponent } from './centro/centro.component';
 import { LogInComponent } from './log-in/log-in.component';
 import { FormsModule } from '@angular/forms';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { IngresoMaterialComponent } from './ingreso-material/ingreso-material.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     SedeComponent,
     CentroComponent,
     LogInComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    IngresoMaterialComponent
   ],
   imports: [
     BrowserModule,
