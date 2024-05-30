@@ -40,13 +40,13 @@
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID Ingreso</th>
-                    <th>Centro Acopio</th>
-                    <th>Carnet Estudiante</th>
-                    <th>Fecha de Transacción</th>
-                    <th>Tipo de material</th>
-                    <th>Cantidad de material</th>
-                    <th>Cantidad Tec-Colónes</th>
+                    <th class="sortable" (click)="sort('id')">ID Ingreso</th>
+                    <th class="sortable" (click)="sort('codigo_centro_acopio')">Centro Acopio</th>
+                    <th class="sortable" (click)="sort('estudiante')">Carnet Estudiante</th>
+                    <th class="sortable" (click)="sort('fecha_transaccion')">Fecha de Transacción</th>
+                    <th class="sortable" (click)="sort('id_material')">Tipo de material</th>
+                    <th class="sortable" (click)="sort('cantidad')">Cantidad de material</th>
+                    <th class="sortable" (click)="sort('monto')">Cantidad Tec-Colónes</th>
                 </tr>
             </thead>
             <tbody>

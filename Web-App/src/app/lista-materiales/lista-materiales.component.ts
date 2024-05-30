@@ -27,4 +27,5 @@ export class ListaMaterialesComponent implements OnInit {
       this.materials = materials;
     });
   }
+
 }

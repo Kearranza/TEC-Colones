@@ -18,7 +18,7 @@
     margin-right: auto;
 }
 
-.form-group{
+.form-group {
     width: 250px;
 }
 
@@ -35,18 +35,21 @@
         transform: scale(1);
     }
 }
+
 .text-danger {
     animation: breathe 3s infinite;
     text-align: center;
 }
+
 .message {
     text-align: center;
     font-size: 1.1em;
     font-weight: bold;
     animation: breathe 3s infinite;
-    color: #0d2026; 
-    text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5); 
+    color: #0d2026;
+    text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5);
 }
+
 .text {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -74,4 +77,15 @@
 
 .table-row:hover {
     transform: scale(1.05);
+}
+
+.sortable {
+    cursor: pointer;
+}
+
+.sortable:hover {
+    font-weight: bold;
+    color: #0d2026;
+    text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5);
+    animation: breathe 3s infinite;
 }

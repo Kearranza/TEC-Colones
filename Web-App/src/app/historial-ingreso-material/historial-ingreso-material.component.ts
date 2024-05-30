@@ -15,6 +15,8 @@ export class HistorialIngresoMaterialComponent implements OnInit {
   historial: any[] = [];
   filtredHistorial: any[] = [];
   message: string = '';
+  currentSortColumn = '';
+  sortAscending = true;
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -29,6 +31,22 @@ export class HistorialIngresoMaterialComponent implements OnInit {
     this.fetchHistorial();
     this.fetchMaterial();
 
+  }
+  
+  // Sort the historial by the column
+  sort(column: string): void {
+    this.currentSortColumn = column;
+    this.sortAscending = !this.sortAscending;
+  
+    this.filtredHistorial.sort((a, b) => {
+      if (a[column] < b[column]) {
+        return this.sortAscending ? -1 : 1;
+      } else if (a[column] > b[column]) {
+        return this.sortAscending ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
   }
 
   // Fetch all the "sedes"
