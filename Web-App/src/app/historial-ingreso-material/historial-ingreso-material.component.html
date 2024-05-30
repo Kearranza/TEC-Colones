@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+<div class="container container_s">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="centro">Centro de Acopio</label>
+            <select id="centro" class="form-control" formControlName="centro">
+                <option *ngFor="let centro of centros" [value]="centro.codigo">{{centro.codigo}}</option>
+            </select>
+            <div *ngIf="form.get('centro')?.touched && form.get('centro')?.invalid" class="text-danger">
+                El centro de acopio es requerido
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaInicial">Fecha Inicial</label>
+            <input type="date" id="fechaInicial" class="form-control" formControlName="fechaInicial">
+            <div *ngIf="form.get('fechaInicial')?.touched && form.get('fechaInicial')?.invalid" class="text-danger">
+                La fecha inicial es requerida
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaFinal">Fecha Final</label>
+            <input type="date" id="fechaFinal" class="form-control" formControlName="fechaFinal">
+            <div *ngIf="form.get('fechaFinal')?.touched && form.get('fechaFinal')?.invalid" class="text-danger">
+                La fecha final es requerida
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Buscar</button>
+    </form>
+</div>
+
+<div class="container mt-4">
+    <h2 class="text-center">Historial Ingreso Material</h2>
+    <div style="max-width: 1200px; margin: auto;">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID Ingreso</th>
+                    <th>Centro Acopio</th>
+                    <th>Carnet Estudiante</th>
+                    <th>Fecha de Transacción</th>
+                    <th>Tipo de material</th>
+                    <th>Cantidad Tec-Colónes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of filtredHistorial" class="table-row">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.codigo_centro_acopio }}</td>
+                    <td>{{ item.estudiante }}</td>
+                    <td>{{ item.fecha_transaccion }}</td>
+                    <td>{{ item.id_material }}</td> 
+                    <td>{{ item.cantidad }}</td>
+                    <td>{{ item.monto }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

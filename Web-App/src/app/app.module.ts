@@ -13,6 +13,7 @@ import { LogInComponent } from './log-in/log-in.component';
 import { FormsModule } from '@angular/forms';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { IngresoMaterialComponent } from './ingreso-material/ingreso-material.component';
+import { HistorialIngresoMaterialComponent } from './historial-ingreso-material/historial-ingreso-material.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { IngresoMaterialComponent } from './ingreso-material/ingreso-material.co
     CentroComponent,
     LogInComponent,
     LandingPageComponent,
-    IngresoMaterialComponent
+    IngresoMaterialComponent,
+    HistorialIngresoMaterialComponent
   ],
   imports: [
     BrowserModule,
