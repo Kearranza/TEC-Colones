@@ -11,6 +11,7 @@ import { Validators } from '@angular/forms';
 export class HistorialIngresoMaterialComponent implements OnInit {
   form!: FormGroup;
   centros: any[] = [];
+  materiales: any[] = [];
   historial: any[] = [];
   filtredHistorial: any[] = [];
   message: string = '';
@@ -26,6 +27,7 @@ export class HistorialIngresoMaterialComponent implements OnInit {
 
     this.fetchSedes();
     this.fetchHistorial();
+    this.fetchMaterial();
 
   }
 
@@ -43,6 +45,24 @@ export class HistorialIngresoMaterialComponent implements OnInit {
     });
   }
 
+  // Fetch all the "materiales"
+  fetchMaterial(): void {
+    this.http.get<any[]>('http://127.0.0.1:5000/materiales').subscribe(materiales => {
+      this.materiales = materiales;
+    });
+  }
+
+  // Map the material names to the historial by id
+  mapMaterialNames(): void {
+    this.filtredHistorial = this.filtredHistorial.map(item => {
+      const material = this.materiales.find(material => material.id === item.id_material);
+      return {
+        ...item,
+        id_material: material ? material.nombre : item.id_material
+      };
+    });
+  }
+
   onSubmit(): void {
     const centro = this.form.get('centro')?.value;
     const fechaInicial = new Date(`${this.form.get('fechaInicial')?.value}T00:00:00`);
@@ -56,6 +76,8 @@ export class HistorialIngresoMaterialComponent implements OnInit {
         fechaTransaccionWithoutTime >= fechaInicial &&
         fechaTransaccionWithoutTime <= fechaFinal;
     });
+
+    this.mapMaterialNames();
 
     if (this.filtredHistorial.length > 0) {
       this.message = 'Búsqueda realizada con éxito';
