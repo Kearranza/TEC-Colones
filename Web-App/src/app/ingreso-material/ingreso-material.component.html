@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+    <div style="max-width: 600px; margin: auto;">
+        <h2 class="text-center">Ingreso de Material</h2>
+        <form [formGroup]="ingresoMaterialForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mt-2">
+                <label for="centroAcopio">Centro de Acopio</label>
+                <select class="form-control" id="centroAcopio" formControlName="centroAcopio" [disabled]="user?.centro">
+                    <option *ngFor="let centro of centros" [value]="centro.codigo"
+                        [selected]="centro.codigo === user?.centro">{{centro.codigo}}</option>
+                </select>
+                <div *ngIf="ingresoMaterialForm.controls['centroAcopio'].errors?.['required'] && ingresoMaterialForm.controls['centroAcopio'].touched"
+                    class="text-danger">
+                    El centro de acopio es requerido.
+                </div>
+            </div>
+            <div class="form-group mt-2">
+                <label for="carnet">Carnet</label>
+                <input type="text" class="form-control" id="carnet" formControlName="carnet">
+                <div *ngIf="ingresoMaterialForm.controls['carnet'].errors?.['required'] && ingresoMaterialForm.controls['carnet'].touched"
+                    class="text-danger">
+                    El carnet es requerido.
+                </div>
+            </div>
+
+            <div formArrayName="subContainers" class="sub-container">
+                <div *ngFor="let subContainer of subContainers.controls; let i = index" [formGroupName]="i"
+                    class="sub-container">
+                    <div class="form-group">
+                        <label for="material">Seleccionar material</label>
+                        <select class="form-control" id="material" formControlName="material">
+                            <option *ngFor="let material of materiales" [value]="material.id">{{material.nombre}}
+                            </option>
+                        </select>
+                        <div *ngIf="subContainer?.get('material')?.touched && subContainer?.get('material')?.errors"
+                            class="text-danger">
+                            El material es requerido
+                        </div>
+                        <div *ngFor="let subContainer of subContainers.controls; let i = index">
+                        </div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="cantidadMaterial">Cantidad de material</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="cantidadMaterial"
+                                formControlName="cantidadMaterial">
+                            <div class="input-group-append">
+                                <span *ngIf="getUnidad(i)" class="btn btn-outline-secondary no-hover">{{ getUnidad(i)
+                                    }}</span>
+                            </div>
+                        </div>
+                        <div *ngIf="subContainer.get('cantidadMaterial')?.touched && subContainer.get('cantidadMaterial')?.errors"
+                            class="text-danger">
+                            La cantidad es requerida.
+                        </div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label for="tecColones">Monto en Tec-Colónes</label>
+                        <input type="number" class="form-control btn btn-outline-secondary no-hover-round"
+                            id="tecColones" formControlName="tecColones">
+                    </div>
+                    <button type="button" class="btn btn-danger center-button mt-2"
+                        (click)="removeSubContainer(i)">Eliminar</button>
+                </div>
+                <button type="button" class="btn btn-primary center-button mt-2" (click)="addSubContainer()">+</button>
+            </div>
+
+
+
+            <div *ngIf="message" class="message">{{message}}</div>
+            <button type="submit" class="btn btn-primary center-button mt-4"
+                [disabled]="!ingresoMaterialForm.valid">Procesar</button>
+        </form>
+    </div>
+</div>
