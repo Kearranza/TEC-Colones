@@ -65,6 +65,7 @@ export class IngresoMaterialComponent implements OnInit {
     });
   }
 
+  // Update the value of 'tecColones' based on the selected material and the quantity
   updateTecColones(selectedMaterial: { valor_unitario: number; }, cantidad: string | number | null | undefined, subContainerIndex: number): Observable<any> {
     if (selectedMaterial && cantidad) {
       const tecColones = (Number(cantidad) * selectedMaterial.valor_unitario).toString();
@@ -77,6 +78,7 @@ export class IngresoMaterialComponent implements OnInit {
     return new Observable(); 
   }
 
+  // Create a new subContainer to the form
   createSubContainer(): FormGroup {
     return this.fb.group({
       material: ['', Validators.required],
@@ -85,6 +87,7 @@ export class IngresoMaterialComponent implements OnInit {
     });
   }
 
+  // Add a new subContainer to the form.
   addSubContainer() {
     const subContainer = this.createSubContainer();
     this.subContainers.push(subContainer);
@@ -108,6 +111,7 @@ export class IngresoMaterialComponent implements OnInit {
     }
   }
 
+  // Remove the subContainer at the specified index
   removeSubContainer(index: number): void {
     this.subContainers.removeAt(index);
   }
@@ -116,7 +120,7 @@ export class IngresoMaterialComponent implements OnInit {
     return this.ingresoMaterialForm.get('subContainers') as FormArray;
   }
   
-
+  // Get the "unidad" of the selected material
   getUnidad(index: number): string {
     const subContainer = this.subContainers.at(index);
     const materialId = subContainer.get('material')?.value;
