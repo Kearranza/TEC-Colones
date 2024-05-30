@@ -13,6 +13,7 @@ export class HistorialIngresoMaterialComponent implements OnInit {
   centros: any[] = [];
   historial: any[] = [];
   filtredHistorial: any[] = [];
+  message: string = '';
 
   constructor(private fb: FormBuilder, private http: HttpClient) { }
 
@@ -46,16 +47,22 @@ export class HistorialIngresoMaterialComponent implements OnInit {
     const centro = this.form.get('centro')?.value;
     const fechaInicial = new Date(`${this.form.get('fechaInicial')?.value}T00:00:00`);
     const fechaFinal = new Date(`${this.form.get('fechaFinal')?.value}T23:59:59`);
-  
+
     this.filtredHistorial = this.historial.filter(item => {
       const fechaTransaccion = new Date(item.fecha_transaccion);
       const fechaTransaccionWithoutTime = new Date(fechaTransaccion.getFullYear(), fechaTransaccion.getMonth(), fechaTransaccion.getDate());
-  
+
       return item.codigo_centro_acopio === centro &&
         fechaTransaccionWithoutTime >= fechaInicial &&
         fechaTransaccionWithoutTime <= fechaFinal;
     });
-  
-    console.log(this.filtredHistorial);
+
+    if (this.filtredHistorial.length > 0) {
+      this.message = 'Búsqueda realizada con éxito';
+    } else {
+      this.message = 'No se encontraron datos coincidentes';
+    }
+
+    setTimeout(() => this.message = '', 3000);
   }
 }

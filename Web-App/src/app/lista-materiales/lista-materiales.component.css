@@ -28,25 +28,3 @@
     transform: scale(1.05);
 }
 
-.delete-button {
-    position: absolute; 
-    right: -30px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    background: none;
-    border: none;
-    color: transparent;
-    font-size: 1.2em;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.table-row:hover .delete-button {
-    color: red;
-    background: rgba(211, 211, 211, 0.5);
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    text-align: center;
-}

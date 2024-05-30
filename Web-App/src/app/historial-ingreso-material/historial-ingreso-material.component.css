@@ -39,3 +39,39 @@
     animation: breathe 3s infinite;
     text-align: center;
 }
+.message {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: bold;
+    animation: breathe 3s infinite;
+    color: #0d2026; 
+    text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5); 
+}
+.text {
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+    margin-right: 1650px;
+    color: #0d2026;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.center-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-row {
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.table-row:hover {
+    transform: scale(1.05);
+}

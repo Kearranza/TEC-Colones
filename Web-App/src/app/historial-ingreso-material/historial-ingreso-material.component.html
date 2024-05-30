@@ -30,6 +30,9 @@
         <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Buscar</button>
     </form>
 </div>
+<div class="container">
+    <div *ngIf="message" class="message">{{message}}</div>
+</div>
 
 <div class="container mt-4">
     <h2 class="text-center">Historial Ingreso Material</h2>
@@ -42,6 +45,7 @@
                     <th>Carnet Estudiante</th>
                     <th>Fecha de Transacción</th>
                     <th>Tipo de material</th>
+                    <th>Cantidad de material</th>
                     <th>Cantidad Tec-Colónes</th>
                 </tr>
             </thead>
@@ -51,7 +55,7 @@
                     <td>{{ item.codigo_centro_acopio }}</td>
                     <td>{{ item.estudiante }}</td>
                     <td>{{ item.fecha_transaccion }}</td>
-                    <td>{{ item.id_material }}</td> 
+                    <td>{{ item.id_material }}</td>
                     <td>{{ item.cantidad }}</td>
                     <td>{{ item.monto }}</td>
                 </tr>
