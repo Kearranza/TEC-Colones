@@ -22,6 +22,15 @@
                     class="text-danger">
                     El carnet es requerido.
                 </div>
+                <div *ngIf="ingresoMaterialForm.controls['carnet'].errors?.['minlength'] && ingresoMaterialForm.controls['carnet'].touched"
+                    class="text-danger">
+                    El carnet debe tener al menos 10 caracteres.
+                </div>
+
+                <div *ngIf="ingresoMaterialForm.controls['carnet'].errors?.['maxlength'] && ingresoMaterialForm.controls['carnet'].touched"
+                    class="text-danger">
+                    El carnet no debe tener más de 10 caracteres.
+                </div>
             </div>
 
             <div formArrayName="subContainers" class="sub-container">
@@ -50,9 +59,9 @@
                                     }}</span>
                             </div>
                         </div>
-                        <div *ngIf="subContainer.get('cantidadMaterial')?.touched && subContainer.get('cantidadMaterial')?.errors"
+                        <div *ngIf="subContainer.get('cantidadMaterial')?.touched && subContainer.get('cantidadMaterial')?.value <= 0"
                             class="text-danger">
-                            La cantidad es requerida.
+                            La cantidad debe ser mayor a 0.
                         </div>
                     </div>
                     <div class="form-group mt-2">

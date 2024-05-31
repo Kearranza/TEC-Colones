@@ -32,7 +32,7 @@ export class IngresoMaterialComponent implements OnInit {
 
     // Populate the select with the "materiales"
     this.http.get<any[]>('http://127.0.0.1:5000/materiales').subscribe(materiales => {
-      this.materiales = materiales;
+      this.materiales = materiales.filter(material => material.estado === 1);
     });
 
     this.user = this.cache.getItem('user');
@@ -54,7 +54,7 @@ export class IngresoMaterialComponent implements OnInit {
           this.updateTecColones(selectedMaterial, subContainer.get('cantidadMaterial')?.value, index);
         });
       }
-    
+
       const cantidadMaterialControl = subContainer.get('cantidadMaterial');
       if (cantidadMaterialControl) {
         cantidadMaterialControl.valueChanges.subscribe(cantidad => {
@@ -75,14 +75,14 @@ export class IngresoMaterialComponent implements OnInit {
         tecColonesControl.setValue(tecColones, { emitEvent: false });
       }
     }
-    return new Observable(); 
+    return new Observable();
   }
 
   // Create a new subContainer to the form
   createSubContainer(): FormGroup {
     return this.fb.group({
       material: ['', Validators.required],
-      cantidadMaterial: ['', Validators.required],
+      cantidadMaterial: ['', [Validators.required, Validators.pattern('^(0*\.0*[1-9][0-9]*|[1-9][0-9]*\.?[0-9]*)$')]],
       tecColones: ['', Validators.required]
     });
   }
@@ -91,9 +91,9 @@ export class IngresoMaterialComponent implements OnInit {
   addSubContainer() {
     const subContainer = this.createSubContainer();
     this.subContainers.push(subContainer);
-  
+
     const index = this.subContainers.length - 1;
-  
+
     const materialControl = subContainer.get('material');
     if (materialControl) {
       materialControl.valueChanges.subscribe(materialId => {
@@ -101,7 +101,7 @@ export class IngresoMaterialComponent implements OnInit {
         this.updateTecColones(selectedMaterial, subContainer.get('cantidadMaterial')?.value, index);
       });
     }
-  
+
     const cantidadMaterialControl = subContainer.get('cantidadMaterial');
     if (cantidadMaterialControl) {
       cantidadMaterialControl.valueChanges.subscribe(cantidad => {
@@ -119,7 +119,7 @@ export class IngresoMaterialComponent implements OnInit {
   get subContainers(): FormArray {
     return this.ingresoMaterialForm.get('subContainers') as FormArray;
   }
-  
+
   // Get the "unidad" of the selected material
   getUnidad(index: number): string {
     const subContainer = this.subContainers.at(index);
@@ -140,7 +140,7 @@ export class IngresoMaterialComponent implements OnInit {
           cantidad: subContainer.cantidadMaterial
         };
       });
-  
+
       ingresoMaterials.forEach(ingresoMaterial => {
         this.http.post('http://127.0.0.1:5000/cambios', ingresoMaterial).subscribe(response => {
           // Handle response here
@@ -148,28 +148,28 @@ export class IngresoMaterialComponent implements OnInit {
           console.error(error);
         });
       });
-  
+
       this.ingresoMaterialForm.reset();
-  
+
       // Capture the values before resetting the form
       const centroAcopioValue = formData.centroAcopio;
       const carnetValue = formData.carnet;
-  
+
       this.ingresoMaterialForm.reset();
-  
+
       // Set the values back
       const centroAcopioControl = this.ingresoMaterialForm.get('centroAcopio');
       if (centroAcopioControl) {
         centroAcopioControl.setValue(centroAcopioValue, { emitEvent: false });
       }
-  
+
       const carnetControl = this.ingresoMaterialForm.get('carnet');
       if (carnetControl) {
         carnetControl.setValue(carnetValue, { emitEvent: false });
       }
-  
+
       this.message = 'El ingreso de material ha sido efectuado.';
-  
+
       setTimeout(() => {
         this.message = '';
       }, 3000);
