@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
-from materials import materials
-from sedes import sedes
-from centros import centros
-from cambios import cambios  
-from config import Config
+from EndPoints.materials import materials
+from EndPoints.sedes import sedes
+from EndPoints.centros import centros
+from EndPoints.cambios import cambios  
+from Variados.config import Config
 
 app = Flask(__name__)
 CORS(app)
