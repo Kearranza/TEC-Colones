@@ -82,7 +82,7 @@ export class IngresoMaterialComponent implements OnInit {
   createSubContainer(): FormGroup {
     return this.fb.group({
       material: ['', Validators.required],
-      cantidadMaterial: ['', [Validators.required, Validators.pattern('^(0*\.0*[1-9][0-9]*|[1-9][0-9]*\.?[0-9]*)$')]],
+      cantidadMaterial: ['', [Validators.required, Validators.pattern('^[1-9][0-9]*$')]],
       tecColones: ['', Validators.required]
     });
   }
