@@ -206,3 +206,71 @@ def insert_cambio(data):
             return False, f"Error al insertar el cambio: {e}"
     else:
         return False, "Error de conexión a la base de datos"
+
+
+
+def get_all_usuarios():
+    """Retrieve all users from the Usuarios table."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Usuarios")
+        usuarios = cursor.fetchall()
+        conn.close()
+        return usuarios
+    return None
+
+def get_usuario_by_username(username):
+    """Retrieve a specific user by their username."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Usuarios WHERE Usuario = ?", (username,))
+        usuario = cursor.fetchone()
+        conn.close()
+        return usuario
+    return None
+
+def insert_usuario(data):
+    """Insert a new user into the Usuarios table."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+
+        # Opcionalmente verifica si el código del centro de acopio existe
+        if 'Codigo_Centro_Acopio' in data and data['Codigo_Centro_Acopio']:
+            cursor.execute("SELECT * FROM CentrosDeAcopio WHERE codigo = ?", (data['Codigo_Centro_Acopio'],))
+            if not cursor.fetchone():
+                conn.close()
+                return False, "Centro de acopio no encontrado"
+
+        # Intenta insertar el nuevo usuario
+        try:
+            cursor.execute('''
+                INSERT INTO Usuarios (Usuario, Contraseña, Permisos, Codigo_Centro_Acopio)
+                VALUES (?, ?, ?, ?)
+            ''', (
+                data['Usuario'],
+                data['Contraseña'],
+                data['Permisos'],
+                data.get('Codigo_Centro_Acopio', None)  # Maneja la posibilidad de que este campo sea nulo
+            ))
+            conn.commit()
+            conn.close()
+            return True, "Usuario creado exitosamente"
+        except sqlite3.Error as e:
+            conn.close()
+            return False, f"Error al insertar el usuario: {e}"
+    else:
+        return False, "Error de conexión a la base de datos"
+def get_usuarios_by_permiso(permiso):
+    """Retrieve users by their permission type."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Usuarios WHERE Permisos = ?", (permiso,))
+        usuarios = cursor.fetchall()
+        conn.close()
+        return usuarios
+    return None
+
