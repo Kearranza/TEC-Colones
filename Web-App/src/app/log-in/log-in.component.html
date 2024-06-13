@@ -1,36 +1,17 @@
 <div class="container">
     <img src="../../assets/Tec-Colones-Logo.png" alt="logo" class="logo">
-    <form (ngSubmit)="onSubmit()">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <label for="usuario">Usuario</label>
-            <input type="text" class="form-control" id="usuario" [(ngModel)]="username" name="user" required>
+            <input type="text" class="form-control" id="usuario" formControlName="user" required>
         </div>
 
         <div class="form-group">
             <label for="contrasena">Contraseña</label>
-            <input type="password" class="form-control" id="contrasena" name="password" required>
+            <input type="password" class="form-control" id="contrasena" formControlName="password" required>
         </div>
 
-        <div class="form-group">
-            <label for="permisos">Permisos</label>
-            <select class="form-control" id="permisos" [(ngModel)]="rights" name="rights" required (change)="centro = ''">
-                <option value="administrador">Administrador</option>
-                <option value="centro">Centro de Acopio</option>
-                <option value="estudiante">Estudiante</option>
-            </select>
-        </div>
-
-        <div class="form-group" *ngIf="rights === 'centro'">
-            <label for="centro">Centro de Acopio</label>
-            <select class="form-control" id="centro" [(ngModel)]="centro" name="centro" required>
-                <option value="">Seleccione un Centro de Acopio</option>
-                <option *ngFor="let centro of centros" [ngValue]="centro.codigo">{{centro.codigo}}</option>
-            </select>
-            <div *ngIf="centro === ''" class="text-danger text-center">
-                El centro de acopio es requerido.
-            </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+        <p *ngIf="message" class="message">{{ message }}</p>
+        <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Iniciar Sesión</button>
     </form>
 </div>
