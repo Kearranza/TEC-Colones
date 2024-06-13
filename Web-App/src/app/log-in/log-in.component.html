@@ -11,7 +11,7 @@
             <input type="password" class="form-control" id="contrasena" formControlName="password" required>
         </div>
 
-        <p *ngIf="message" class="message">{{ message }}</p>
+        <p *ngIf="message" class="text-danger">{{ message }}</p>
         <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Iniciar Sesión</button>
     </form>
 </div>
