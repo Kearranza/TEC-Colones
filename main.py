@@ -81,7 +81,8 @@ def main():
                                         fecha_transaccion TEXT NOT NULL,
                                         monto INTEGER NOT NULL,
                                         id_material TEXT NOT NULL CHECK (id_material LIKE 'M-____________'),
-                                        cantidad INTEGER NOT NULL CHECK (cantidad >= 0),
+                                        cantidad INTEGER NOT NULL,
+                                        estado INTEGER NOT NULL,  -- Nueva columna para el estado de la transacción
                                         FOREIGN KEY (codigo_centro_acopio) REFERENCES CentrosDeAcopio(codigo),
                                         FOREIGN KEY (id_material) REFERENCES Materiales(id)
                                     ); """
