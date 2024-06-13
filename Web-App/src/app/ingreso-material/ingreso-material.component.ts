@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormArray, FormGroup, AbstractControl } from '
 import { HttpClient } from '@angular/common/http';
 import { CacheService } from '../cache.service';
 import { Observable, switchMap } from 'rxjs';
+import { BASE_URL } from '../constants';
 
 @Component({
   selector: 'app-ingreso-material',
@@ -12,6 +13,7 @@ import { Observable, switchMap } from 'rxjs';
 export class IngresoMaterialComponent implements OnInit {
   user: any;
   message: string = '';
+  messageError: string = '';
   centros: any[] = [];
   materiales: any[] = [];
   ingresoMaterialForm = this.fb.group({
@@ -64,6 +66,7 @@ export class IngresoMaterialComponent implements OnInit {
       }
     });
   }
+
 
   // Update the value of 'tecColones' based on the selected material and the quantity
   updateTecColones(selectedMaterial: { valor_unitario: number; }, cantidad: string | number | null | undefined, subContainerIndex: number): Observable<any> {
@@ -129,50 +132,68 @@ export class IngresoMaterialComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.ingresoMaterialForm.valid) {
-      const formData = this.ingresoMaterialForm.getRawValue();
-      const ingresoMaterials = formData.subContainers.map((subContainer: any) => {
-        return {
-          codigo_centro_acopio: formData.centroAcopio,
-          estudiante: formData.carnet,
-          monto: subContainer.tecColones,
-          id_material: subContainer.material,
-          cantidad: subContainer.cantidadMaterial
-        };
+    // Validate the student ID
+    const carnet = this.ingresoMaterialForm.get('carnet')?.value;
+    this.http.get<{ ResponseCode: number, Message: string }>( BASE_URL + 'https://cuentatec.azurewebsites.net/api/StudentValidator?carnet=' + (carnet?.toString() ?? ''))
+      .subscribe(response => {
+        // Student ID is valid
+        if (response.ResponseCode === 200) {
+          if (this.ingresoMaterialForm.valid) {
+            const formData = this.ingresoMaterialForm.getRawValue();
+            const ingresoMaterials = formData.subContainers.map((subContainer: any) => {
+              return {
+                codigo_centro_acopio: formData.centroAcopio,
+                estudiante: formData.carnet,
+                monto: subContainer.tecColones,
+                id_material: subContainer.material,
+                cantidad: subContainer.cantidadMaterial
+              };
+            });
+
+            ingresoMaterials.forEach(ingresoMaterial => {
+              const postData = { ...ingresoMaterial, estado: 0 };
+              this.http.post('http://127.0.0.1:5000/cambios', postData).subscribe(response => {
+                // Handle response here
+              }, error => {
+                console.error(error);
+              });
+            });
+
+            this.ingresoMaterialForm.reset();
+
+            // Capture the values before resetting the form
+            const centroAcopioValue = formData.centroAcopio;
+            const carnetValue = formData.carnet;
+
+            this.ingresoMaterialForm.reset();
+
+            // Set the values back
+            const centroAcopioControl = this.ingresoMaterialForm.get('centroAcopio');
+            if (centroAcopioControl) {
+              centroAcopioControl.setValue(centroAcopioValue, { emitEvent: false });
+            }
+
+            const carnetControl = this.ingresoMaterialForm.get('carnet');
+            if (carnetControl) {
+              carnetControl.setValue(carnetValue, { emitEvent: false });
+            }
+
+            this.message = 'El ingreso de material ha sido efectuado.';
+
+            setTimeout(() => {
+              this.message = '';
+            }, 3000);
+          }
+        }
+      }, error => {
+        this.messageError = 'El carnet ingresado no existe.';
+
+        setTimeout(() => {
+          this.messageError = '';
+        }, 6000);
+
+        console.error(error);
       });
 
-      ingresoMaterials.forEach(ingresoMaterial => {
-        this.http.post('http://127.0.0.1:5000/cambios', ingresoMaterial).subscribe(response => {
-          // Handle response here
-        }, error => {
-          console.error(error);
-        });
-      });
-
-      this.ingresoMaterialForm.reset();
-
-      // Capture the values before resetting the form
-      const centroAcopioValue = formData.centroAcopio;
-      const carnetValue = formData.carnet;
-
-      this.ingresoMaterialForm.reset();
-
-      // Set the values back
-      const centroAcopioControl = this.ingresoMaterialForm.get('centroAcopio');
-      if (centroAcopioControl) {
-        centroAcopioControl.setValue(centroAcopioValue, { emitEvent: false });
-      }
-
-      const carnetControl = this.ingresoMaterialForm.get('carnet');
-      if (carnetControl) {
-        carnetControl.setValue(carnetValue, { emitEvent: false });
-      }
-
-      this.message = 'El ingreso de material ha sido efectuado.';
-
-      setTimeout(() => {
-        this.message = '';
-      }, 3000);
-    }
   }
 }
