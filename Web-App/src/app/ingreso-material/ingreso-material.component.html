@@ -31,6 +31,7 @@
                     class="text-danger">
                     El carnet no debe tener más de 10 caracteres.
                 </div>
+
             </div>
 
             <div formArrayName="subContainers" class="sub-container">
@@ -78,6 +79,7 @@
 
 
             <div *ngIf="message" class="message">{{message}}</div>
+            <div *ngIf="messageError" class="message text-danger">{{messageError}}</div>
             <button type="submit" class="btn btn-primary center-button mt-4"
                 [disabled]="!ingresoMaterialForm.valid">Procesar</button>
         </form>
