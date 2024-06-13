@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CacheService } from '../cache.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-log-in',
@@ -9,30 +10,46 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./log-in.component.css']
 })
 export class LogInComponent {
-  username: string = '';
-  rights: string = '';
-  centro: string = '';
-  centros: any[] = [];
+  message: string = '';
+  loginForm: FormGroup = new FormGroup({});
 
-  constructor(private cache: CacheService, private router: Router, private http: HttpClient) { }
+  constructor(private cache: CacheService, private router: Router, private http: HttpClient, private formBuilder: FormBuilder) { }
 
-  fetchCentros(): void {
-    this.http.get<any[]>('http://127.0.0.1:5000/centros').subscribe(centros => {
-      this.centros = centros;
+  ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      user: ['', Validators.required],
+      password: ['', Validators.required]
     });
   }
 
-  ngOnInit() {
-    this.fetchCentros();
-  }
-
   onSubmit(): void {
-    const user = {
-      username: this.username,
-      rights: this.rights,
-      centro: this.centro
-    };
-    this.cache.setItem('user', user);
-    this.router.navigate(['/']);
+    if (this.loginForm.valid) {
+      this.http.get<any[]>('http://127.0.0.1:5000/usuarios').subscribe(users => {
+        const user = users.find(u => u.Usuario === this.loginForm.value.user);
+
+        // If the user does not exist, display a message
+        if (!user) {
+          this.message = 'El usuario no existe';
+          setTimeout(() => {
+            this.message = '';
+          }, 3000);
+
+          // If the password is incorrect, display a message
+        } else if (user.Contraseña !== this.loginForm.value.password) {
+          this.message = 'El usuario y contraseña no coinciden';
+          setTimeout(() => {
+            this.message = '';
+          }, 3000);
+        } else {
+          const userCache = {
+            username: user.Usuario,
+            rights: user.Permisos,
+            centro: user.Codigo_Centro_Acopio
+          };
+          this.cache.setItem('user', userCache);
+          this.router.navigate(['/']);
+        }
+      });
+    }
   }
 }
