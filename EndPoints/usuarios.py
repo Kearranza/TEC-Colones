@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from db import get_all_usuarios, get_usuario_by_username, insert_usuario, get_centro_by_codigo, get_usuarios_by_permiso
+from EndPoints.db import get_all_usuarios, get_usuario_by_username, insert_usuario, get_centro_by_codigo, get_usuarios_by_permiso
 from datetime import datetime
 
 usuarios = Blueprint('usuarios', __name__)

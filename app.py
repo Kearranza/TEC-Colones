@@ -5,7 +5,7 @@ from EndPoints.sedes import sedes
 from EndPoints.centros import centros
 from EndPoints.cambios import cambios  
 from Variados.config import Config
-from usuarios import usuarios
+from EndPoints.usuarios import usuarios
 
 app = Flask(__name__)
 CORS(app)
