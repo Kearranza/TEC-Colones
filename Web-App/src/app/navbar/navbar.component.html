@@ -10,16 +10,17 @@
         <a routerLink="/centro" class="text">Crear Centro</a>
         <a routerLink="/ingreso-material" class="text">Ingresar Material</a>
         <a routerLink="/historial-ingreso-material" class="text">Historial Ingreso Material</a>
-        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+        <a routerLink="/anular" class="text">Historial Transacciones</a>
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Cerrar Sesión</a>
     </ng-container>
 
     <ng-container *ngIf="userRights === 'Centro de Acopio'">
         <a routerLink="/ingreso-material" class="text">Ingresar Material</a>
-        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Cerrar Sesión</a>
     </ng-container>
 
     <ng-container *ngIf="userRights === 'Estudiante'">
-        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Log In</a>
+        <a routerLink="/logIn" class="text rightmost-link" (click)="removeUser()">Cerrar Sesión</a>
     </ng-container>
 
     <ng-container *ngIf="userRights === ''|| !userRights">

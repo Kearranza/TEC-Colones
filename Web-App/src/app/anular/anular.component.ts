@@ -37,11 +37,16 @@ export class AnularComponent implements OnInit {
   // Show the estado as a string
   estadoToString(estado: number): string {
     switch (estado) {
-      case 0: return 'Vigente';
+      case 0: return 'Efectuada';
       case 1: return 'Anulada';
       case 3: return 'Anulación';
       default: return 'Unknown';
     }
+  }
+
+
+  revertTransaction(item: any): void {
+    console.log(item);
   }
 
 
@@ -103,8 +108,8 @@ export class AnularComponent implements OnInit {
       const fechaTransaccion = new Date(item.fecha_transaccion);
       const fechaTransaccionWithoutTime = new Date(fechaTransaccion.getFullYear(), fechaTransaccion.getMonth(), fechaTransaccion.getDate());
   
-      return (carnet ? item.carnet === carnet : true) &&
-        (tipo ? item.tipo === tipo : true) &&
+      return (carnet ? item.estudiante === carnet : true) &&
+      (tipo ? item.estado === +tipo : true) &&
         fechaTransaccionWithoutTime >= fechaInicial &&
         fechaTransaccionWithoutTime <= fechaFinal;
     });

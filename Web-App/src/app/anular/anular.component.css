@@ -75,9 +75,6 @@
     transition: transform 0.3s ease;
 }
 
-.table-row:hover {
-    transform: scale(1.05);
-}
 
 .sortable {
     cursor: pointer;
@@ -88,4 +85,25 @@
     color: #0d2026;
     text-shadow: 1px 1px 2px rgba(192, 222, 233, 0.5);
     animation: breathe 3s infinite;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    position: relative;
+}
+
+.clickable:hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.2);
+    z-index: 1;
 }

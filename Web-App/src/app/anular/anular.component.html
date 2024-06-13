@@ -10,7 +10,7 @@
             <label for="tipo">Tipo</label>
             <select id="tipo" class="form-control" formControlName="tipo">
                 <option value=""></option>
-                <option value="0">Vigente</option>
+                <option value="0">Efectuada</option>
                 <option value="1">Anulada</option>
                 <option value="3">Anulación</option>
             </select>
@@ -52,11 +52,12 @@
                     <th class="sortable" (click)="sort('id_material')">Tipo de material</th>
                     <th class="sortable" (click)="sort('cantidad')">Cantidad de material</th>
                     <th class="sortable" (click)="sort('monto')">Cantidad Tec-Colónes</th>
-                    <th class="sortable" (click)="sort('estado')">Tipo</th>
+                    <th class="sortable" (click)="sort('estado')">Estado</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of filtredHistorial" class="table-row">
+                <tr *ngFor="let item of filtredHistorial" class="table-row" [class.clickable]="item.estado === 0"
+                    (click)="item.estado === 0 && revertTransaction(item)">
                     <td>{{ item.id }}</td>
                     <td>{{ item.codigo_centro_acopio }}</td>
                     <td>{{ item.estudiante }}</td>
