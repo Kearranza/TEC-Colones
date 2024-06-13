@@ -171,32 +171,19 @@ def insert_cambio(data):
     conn = get_db_connection()
     if conn:
         cursor = conn.cursor()
-
-        # Verifica si el centro de acopio existe
-        cursor.execute("SELECT * FROM CentrosDeAcopio WHERE codigo = ?", (data['codigo_centro_acopio'],))
-        if not cursor.fetchone():
-            conn.close()
-            return False, "Centro de acopio no encontrado"
-
-        # Verifica si el ID del material existe
-        cursor.execute("SELECT * FROM Materiales WHERE id = ?", (data['id_material'],))
-        if not cursor.fetchone():
-            conn.close()
-            return False, "ID de material no encontrado"
-
-        # Intenta insertar el nuevo cambio
         try:
             cursor.execute('''
-                INSERT INTO Cambios (id, codigo_centro_acopio, estudiante, fecha_transaccion, monto, id_material, cantidad)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Cambios (id, codigo_centro_acopio, estudiante, fecha_transaccion, monto, id_material, cantidad, estado)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 data['id'],
                 data['codigo_centro_acopio'],
                 data['estudiante'],
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                data['fecha_transaccion'],
                 data['monto'],
                 data['id_material'],
-                data['cantidad']
+                data['cantidad'],
+                data['estado']
             ))
             conn.commit()
             conn.close()
@@ -206,6 +193,46 @@ def insert_cambio(data):
             return False, f"Error al insertar el cambio: {e}"
     else:
         return False, "Error de conexión a la base de datos"
+
+def update_cambio(cambio_id, data):
+    """Update an existing cambio."""
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('''
+                UPDATE Cambios SET 
+                codigo_centro_acopio = ?, 
+                estudiante = ?, 
+                fecha_transaccion = ?, 
+                monto = ?, 
+                id_material = ?, 
+                cantidad = ?, 
+                estado = ?
+                WHERE id = ?
+            ''', (
+                data['codigo_centro_acopio'],
+                data['estudiante'],
+                data['fecha_transaccion'],
+                data['monto'],
+                data['id_material'],
+                data['cantidad'],
+                data['estado'],
+                cambio_id
+            ))
+            if cursor.rowcount == 0:
+                conn.close()
+                return False, "No cambio updated"
+            conn.commit()
+            conn.close()
+            return True, "Cambio updated successfully"
+        except sqlite3.Error as e:
+            conn.close()
+            return False, f"Error updating the cambio: {e}"
+    else:
+        return False, "Error de conexión a la base de datos"
+
+
 
 
 
