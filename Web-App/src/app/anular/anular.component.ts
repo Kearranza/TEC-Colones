@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog-component/confirmation-dialog-component.component';
 
 @Component({
   selector: 'app-anular',
@@ -15,10 +17,11 @@ export class AnularComponent implements OnInit {
   historial: any[] = [];
   filtredHistorial: any[] = [];
   message: string = '';
+  deleteMessage: string = '';
   currentSortColumn = '';
   sortAscending = true;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) { }
+  constructor(private fb: FormBuilder, private http: HttpClient, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -44,9 +47,64 @@ export class AnularComponent implements OnInit {
     }
   }
 
+  // Confirm the revert of the transaction
+  confirmAndRevert(item: any): void {
+    if (item.estado === 0) {
+      const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: 'Are you sure you want to revert this transaction?'
+        }
+      });
 
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.revertTransaction(item);
+        }
+      });
+    }
+  }
+
+
+  // Change the "estado" of the transaction to "Anulada", and make its "Anulación"
   revertTransaction(item: any): void {
-    console.log(item);
+    const material = this.materiales.find(m => m.nombre === item.id_material);
+    if (material) {
+      item.id_material = material.id;
+    }
+
+    const url = 'http://127.0.0.1:5000/cambios';
+
+    const postData = {
+      codigo_centro_acopio: item.codigo_centro_acopio,
+      estudiante: item.estudiante,
+      monto: -Math.abs(item.monto),
+      id_material: item.id_material,
+      cantidad: -Math.abs(item.cantidad),
+      estado: 3
+    };
+
+    this.http.post(url, postData).subscribe(response => {
+
+      const postData2 = {
+        ...postData,
+        id: item.id,
+        estado: 1,
+        fecha_transaccion: item.fecha_transaccion,
+        monto: Math.abs(item.monto),
+        cantidad: Math.abs(item.cantidad)
+      };
+
+      this.http.post(url, postData2).subscribe(response => {
+      }, error => {
+        console.error(error.error);
+      });
+    }, error => {
+      console.error(error.error);
+    });
+
+    this.deleteMessage = 'Transacción anulada con éxito';
+    setTimeout(() => this.deleteMessage = '', 3000);
+
   }
 
 
@@ -98,30 +156,38 @@ export class AnularComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  // Update the table with the current filters
+  updateTable(): void {
     const carnet = this.form.get('carnet')?.value;
     const tipo = this.form.get('tipo')?.value;
     const fechaInicial = new Date(`${this.form.get('fechaInicial')?.value}T00:00:00`);
     const fechaFinal = new Date(`${this.form.get('fechaFinal')?.value}T23:59:59`);
-  
+
     this.filtredHistorial = this.historial.filter(item => {
       const fechaTransaccion = new Date(item.fecha_transaccion);
       const fechaTransaccionWithoutTime = new Date(fechaTransaccion.getFullYear(), fechaTransaccion.getMonth(), fechaTransaccion.getDate());
-  
+
       return (carnet ? item.estudiante === carnet : true) &&
-      (tipo ? item.estado === +tipo : true) &&
+        (tipo ? item.estado === +tipo : true) &&
         fechaTransaccionWithoutTime >= fechaInicial &&
         fechaTransaccionWithoutTime <= fechaFinal;
     });
-  
+
     this.mapMaterialNames();
-  
+  }
+
+  onSubmit(): void {
+    this.updateTable();
+    this.fetchHistorial();
+    this.updateTable();
+    this.fetchHistorial();
+
     if (this.filtredHistorial.length > 0) {
       this.message = 'Búsqueda realizada con éxito';
     } else {
       this.message = 'No se encontraron datos coincidentes';
     }
-  
+
     setTimeout(() => this.message = '', 3000);
   }
 }
