@@ -21,6 +21,10 @@ export class AnularComponent implements OnInit {
   currentSortColumn = '';
   sortAscending = true;
 
+  private updateTableInterval: any;
+  private fetchHistorialInterval: any;
+  maxCount = 5;
+
   constructor(private fb: FormBuilder, private http: HttpClient, private dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -34,7 +38,13 @@ export class AnularComponent implements OnInit {
     this.fetchSedes();
     this.fetchHistorial();
     this.fetchMaterial();
+    this.updateTable();
 
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.updateTableInterval);
+    clearInterval(this.fetchHistorialInterval);
   }
 
   // Show the estado as a string
@@ -65,7 +75,7 @@ export class AnularComponent implements OnInit {
   }
 
 
-  // Change the "estado" of the transaction to "Anulada", and make its "Anulación"
+  // Change the "estado" of the transaction to "Anulada", and makes its "Anulación"
   revertTransaction(item: any): void {
     const material = this.materiales.find(m => m.nombre === item.id_material);
     if (material) {
@@ -104,6 +114,9 @@ export class AnularComponent implements OnInit {
 
     this.deleteMessage = 'Transacción anulada con éxito';
     setTimeout(() => this.deleteMessage = '', 3000);
+
+    this.updateTableInterval = setInterval(() => this.updateTable(), 500);
+    this.fetchHistorialInterval = setInterval(() => this.fetchHistorial(), 500);
 
   }
 
