@@ -177,6 +177,7 @@ export class IngresoMaterialComponent implements OnInit {
             if (carnetControl) {
               carnetControl.setValue(carnetValue, { emitEvent: false });
             }
+            this.subContainers.clear();
 
             this.message = 'El ingreso de material ha sido efectuado.';
 

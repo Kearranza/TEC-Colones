@@ -1,0 +1,74 @@
+<app-navbar></app-navbar>
+<div class="container container_s">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="carnet">Carnet</label>
+            <input id="carnet" class="form-control" formControlName="carnet" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" class="form-control" formControlName="tipo">
+                <option value=""></option>
+                <option value="0">Efectuada</option>
+                <option value="1">Anulada</option>
+                <option value="3">Anulación</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaInicial">Fecha Inicial</label>
+            <input type="date" id="fechaInicial" class="form-control" formControlName="fechaInicial">
+            <div *ngIf="form.get('fechaInicial')?.touched && form.get('fechaInicial')?.invalid" class="text-danger">
+                La fecha inicial es requerida
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaFinal">Fecha Final</label>
+            <input type="date" id="fechaFinal" class="form-control" formControlName="fechaFinal">
+            <div *ngIf="form.get('fechaFinal')?.touched && form.get('fechaFinal')?.invalid" class="text-danger">
+                La fecha final es requerida
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Buscar</button>
+    </form>
+</div>
+<div class="container">
+    <div *ngIf="message" class="message">{{message}}</div>
+    <div *ngIf="deleteMessage" class="message">{{deleteMessage}}</div>
+</div>
+
+<div class="container mt-4">
+    <h2 class="text-center">Historial Ingreso Material</h2>
+    <div style="max-width: 1200px; margin: auto;">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="sortable" (click)="sort('id')">ID Ingreso</th>
+                    <th class="sortable" (click)="sort('codigo_centro_acopio')">Centro Acopio</th>
+                    <th class="sortable" (click)="sort('estudiante')">Carnet Estudiante</th>
+                    <th class="sortable" (click)="sort('fecha_transaccion')">Fecha de Transacción</th>
+                    <th class="sortable" (click)="sort('id_material')">Tipo de material</th>
+                    <th class="sortable" (click)="sort('cantidad')">Cantidad de material</th>
+                    <th class="sortable" (click)="sort('monto')">Cantidad Tec-Colónes</th>
+                    <th class="sortable" (click)="sort('estado')">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of filtredHistorial" class="table-row" [class.clickable]="item.estado === 0"
+                    (click)="confirmAndRevert(item)">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.codigo_centro_acopio }}</td>
+                    <td>{{ item.estudiante }}</td>
+                    <td>{{ item.fecha_transaccion }}</td>
+                    <td>{{ item.id_material }}</td>
+                    <td>{{ item.cantidad }}</td>
+                    <td>{{ item.monto }}</td>
+                    <td>{{ estadoToString(item.estado) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

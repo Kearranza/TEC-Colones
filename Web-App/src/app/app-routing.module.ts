@@ -8,6 +8,7 @@ import { LogInComponent } from './log-in/log-in.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { IngresoMaterialComponent } from './ingreso-material/ingreso-material.component';
 import { HistorialIngresoMaterialComponent } from './historial-ingreso-material/historial-ingreso-material.component';
+import { AnularComponent } from './anular/anular.component';
 
 const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent },
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'centro', component: CentroComponent },
   { path: 'logIn', component: LogInComponent },
   { path: 'ingreso-material', component: IngresoMaterialComponent },
-  { path: 'historial-ingreso-material', component: HistorialIngresoMaterialComponent }
+  { path: 'historial-ingreso-material', component: HistorialIngresoMaterialComponent },
+  { path: 'anular', component: AnularComponent }
 ];
 
 @NgModule({

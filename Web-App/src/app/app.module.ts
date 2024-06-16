@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { IngresoMaterialComponent } from './ingreso-material/ingreso-material.component';
 import { HistorialIngresoMaterialComponent } from './historial-ingreso-material/historial-ingreso-material.component';
+import { AnularComponent } from './anular/anular.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog-component/confirmation-dialog-component.component';
 
 @NgModule({
   declarations: [
@@ -26,14 +28,16 @@ import { HistorialIngresoMaterialComponent } from './historial-ingreso-material/
     LogInComponent,
     LandingPageComponent,
     IngresoMaterialComponent,
-    HistorialIngresoMaterialComponent
+    HistorialIngresoMaterialComponent,
+    AnularComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
