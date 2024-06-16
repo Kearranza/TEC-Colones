@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from db import get_all_cambios, get_cambio_by_id, insert_cambio, update_cambio
-from utils import generate_id
+from EndPoints.db import get_all_cambios, get_cambio_by_id, insert_cambio, update_cambio
+from Variados.utils import generate_id
 from datetime import datetime
 
 cambios = Blueprint('cambios', __name__)
