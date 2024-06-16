@@ -23,6 +23,9 @@ export class AnularComponent implements OnInit {
 
   private updateTableInterval: any;
   private fetchHistorialInterval: any;
+
+  updateTableCount = 0;
+  fetchHistorialCount = 0;
   maxCount = 5;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private dialog: MatDialog) { }
@@ -115,9 +118,23 @@ export class AnularComponent implements OnInit {
     this.deleteMessage = 'Transacción anulada con éxito';
     setTimeout(() => this.deleteMessage = '', 3000);
 
-    this.updateTableInterval = setInterval(() => this.updateTable(), 500);
-    this.fetchHistorialInterval = setInterval(() => this.fetchHistorial(), 500);
-
+    // Update the table after the transaction is reverted successfully for a period of time
+    this.updateTableInterval = setInterval(() => {
+      if (this.updateTableCount < this.maxCount) {
+        this.updateTable();
+        this.updateTableCount++;
+      } else {
+        clearInterval(this.updateTableInterval);
+      }
+    }, 500);
+    this.fetchHistorialInterval = setInterval(() => {
+      if (this.fetchHistorialCount < this.maxCount) {
+        this.fetchHistorial();
+        this.fetchHistorialCount++;
+      } else {
+        clearInterval(this.fetchHistorialInterval);
+      }
+    }, 500);
   }
 
 
@@ -190,10 +207,8 @@ export class AnularComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.updateTable();
     this.fetchHistorial();
     this.updateTable();
-    this.fetchHistorial();
 
     if (this.filtredHistorial.length > 0) {
       this.message = 'Búsqueda realizada con éxito';
